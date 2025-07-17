@@ -9,7 +9,7 @@ type KernelRandom struct{}
 
 func (k KernelRandom) Seed(_ int64) {}
 
-func (k KernelRandom) Int63() int64 {
+func (k KernelRandom) Uint63() uint64 {
 	var buf [8]byte
 	h, err := os.Open("/dev/random")
 	if err != nil {
@@ -19,5 +19,5 @@ func (k KernelRandom) Int63() int64 {
 	if _, err := h.Read(buf[:]); err != nil {
 		return 0
 	}
-	return int64(binary.LittleEndian.Uint64(buf[:]))
+	return binary.LittleEndian.Uint64(buf[:])
 }
