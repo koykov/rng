@@ -23,6 +23,21 @@ func (k KernelRandom) Intn(n int) int {
 
 func (k KernelRandom) Int31() int32 { return int32(k.Int63() >> 32) }
 
+func (k KernelRandom) Int31n(n int32) int32 {
+	if n <= 0 {
+		panic("invalid argument to Int31n")
+	}
+	if n&(n-1) == 0 { // n is power of two, can mask
+		return k.Int31() & (n - 1)
+	}
+	mx := int32((1 << 31) - 1 - (1<<31)%uint32(n))
+	v := k.Int31()
+	for v > mx {
+		v = k.Int31()
+	}
+	return v % n
+}
+
 func (k KernelRandom) Int63() int64 { return int64(k.Uint63()) }
 
 func (k KernelRandom) Int63n(n int64) int64 {
