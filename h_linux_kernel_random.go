@@ -11,7 +11,7 @@ func (k KernelRandom) Seed(_ int64) {}
 
 func (k KernelRandom) Int() int { return int(uint(k.Int63()) << 1 >> 1) }
 
-func (k KernelRandom) Int31() int32 { return int32(k.Uint63()) }
+func (k KernelRandom) Int31() int32 { return int32(k.Int63() >> 32) }
 
 func (k KernelRandom) Int63() int64 { return int64(k.Uint63()) }
 
