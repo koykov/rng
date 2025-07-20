@@ -38,7 +38,7 @@ func (k KernelRandom) Int31n(n int32) int32 {
 	return v % n
 }
 
-func (k KernelRandom) Int63() int64 { return int64(k.Uint63()) }
+func (k KernelRandom) Int63() int64 { return int64(k.Uint64()) }
 
 func (k KernelRandom) Int63n(n int64) int64 {
 	if n <= 0 {
@@ -55,11 +55,11 @@ func (k KernelRandom) Int63n(n int64) int64 {
 	return v % n
 }
 
-func (k KernelRandom) Uint() uint { return uint(k.Uint63()) }
+func (k KernelRandom) Uint() uint { return uint(k.Uint64()) }
 
-func (k KernelRandom) Uint32() float32 { return float32(k.Uint63()) }
+func (k KernelRandom) Uint32() uint32 { return uint32(k.Int63() >> 31) }
 
-func (k KernelRandom) Uint63() uint64 {
+func (k KernelRandom) Uint64() uint64 {
 	var buf [8]byte
 	h, err := os.Open("/dev/random")
 	if err != nil {
@@ -70,4 +70,22 @@ func (k KernelRandom) Uint63() uint64 {
 		return 0
 	}
 	return binary.LittleEndian.Uint64(buf[:])
+}
+
+func (k KernelRandom) Float64() float64 {
+again:
+	f := float64(k.Int63()) / (1 << 63)
+	if f == 1 {
+		goto again
+	}
+	return f
+}
+
+func (k KernelRandom) Float32() float32 {
+again:
+	f := float32(k.Float64())
+	if f == 1 {
+		goto again
+	}
+	return f
 }
