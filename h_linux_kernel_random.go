@@ -11,6 +11,16 @@ func (k KernelRandom) Seed(_ int64) {}
 
 func (k KernelRandom) Int() int { return int(uint(k.Int63()) << 1 >> 1) }
 
+func (k KernelRandom) Intn(n int) int {
+	if n <= 0 {
+		panic("invalid argument to Intn")
+	}
+	if n <= 1<<31-1 {
+		return int(k.Int31n(int32(n)))
+	}
+	return int(k.Int63n(int64(n)))
+}
+
 func (k KernelRandom) Int31() int32 { return int32(k.Int63() >> 32) }
 
 func (k KernelRandom) Int63() int64 { return int64(k.Uint63()) }
