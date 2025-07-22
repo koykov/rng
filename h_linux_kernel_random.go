@@ -168,7 +168,22 @@ func (k KernelRandom) Shuffle(n int, swap func(i, j int)) {
 		swap(i, j)
 	}
 	for ; i > 0; i-- {
-		j := int(k.Int31n(int32(i + 1)))
+		j := int(k.int31n(int32(i + 1)))
 		swap(i, j)
 	}
+}
+
+func (k KernelRandom) int31n(n int32) int32 {
+	v := k.Uint32()
+	prod := uint64(v) * uint64(n)
+	low := uint32(prod)
+	if low < uint32(n) {
+		thresh := uint32(-n) % uint32(n)
+		for low < thresh {
+			v = k.Uint32()
+			prod = uint64(v) * uint64(n)
+			low = uint32(prod)
+		}
+	}
+	return int32(prod >> 32)
 }
