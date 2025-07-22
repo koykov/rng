@@ -156,3 +156,19 @@ func (k KernelRandom) Read(p []byte) (n int, err error) {
 	defer func() { _ = h.Close() }()
 	return h.Read(p)
 }
+
+func (k KernelRandom) Shuffle(n int, swap func(i, j int)) {
+	if n < 0 {
+		panic("invalid argument to Shuffle")
+	}
+
+	i := n - 1
+	for ; i > 1<<31-1-1; i-- {
+		j := int(k.Int63n(int64(i + 1)))
+		swap(i, j)
+	}
+	for ; i > 0; i-- {
+		j := int(k.Int31n(int32(i + 1)))
+		swap(i, j)
+	}
+}
