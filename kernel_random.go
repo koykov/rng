@@ -4,7 +4,6 @@ import (
 	"encoding/binary"
 	"math"
 	"os"
-	"unsafe"
 )
 
 type KernelRandom struct{}
@@ -61,12 +60,12 @@ func (k KernelRandom) Uint() uint { return uint(k.Uint64()) }
 
 func (k KernelRandom) Uint32() uint32 { return uint32(k.Int63() >> 31) }
 
-func (k KernelRandom) Uint64() (o uint64) {
-	buf := *(*[]byte)(unsafe.Pointer(&o))
-	if _, err := k.Read(buf); err != nil {
-		return
+func (k KernelRandom) Uint64() uint64 {
+	var buf [8]byte
+	if _, err := k.Read(buf[:]); err != nil {
+		return 0
 	}
-	return binary.LittleEndian.Uint64(buf[:]) // todo avoid LE
+	return binary.LittleEndian.Uint64(buf[:])
 }
 
 func (k KernelRandom) Float64() float64 {
@@ -149,7 +148,7 @@ func (k KernelRandom) Perm(n int) []int {
 }
 
 func (k KernelRandom) Read(p []byte) (n int, err error) {
-	h, err := os.Open("/dev/random")
+	h, err := os.OpenFile("/dev/random", os.O_RDONLY, 0644)
 	if err != nil {
 		return
 	}
