@@ -7,17 +7,17 @@ import (
 	"sync"
 )
 
-type KernelRandom struct {
+type kernelRandom struct {
 	f    *os.File
 	err  error
 	once sync.Once
 }
 
-func (r *KernelRandom) Seed(_ int64) {}
+func (r *kernelRandom) Seed(_ int64) {}
 
-func (r *KernelRandom) Int() int { return int(uint(r.Int63()) << 1 >> 1) }
+func (r *kernelRandom) Int() int { return int(uint(r.Int63()) << 1 >> 1) }
 
-func (r *KernelRandom) Intn(n int) int {
+func (r *kernelRandom) Intn(n int) int {
 	if n <= 0 {
 		panic("invalid argument to Intn")
 	}
@@ -27,9 +27,9 @@ func (r *KernelRandom) Intn(n int) int {
 	return int(r.Int63n(int64(n)))
 }
 
-func (r *KernelRandom) Int31() int32 { return int32(r.Int63() >> 32) }
+func (r *kernelRandom) Int31() int32 { return int32(r.Int63() >> 32) }
 
-func (r *KernelRandom) Int31n(n int32) int32 {
+func (r *kernelRandom) Int31n(n int32) int32 {
 	if n <= 0 {
 		panic("invalid argument to Int31n")
 	}
@@ -44,9 +44,9 @@ func (r *KernelRandom) Int31n(n int32) int32 {
 	return v % n
 }
 
-func (r *KernelRandom) Int63() int64 { return int64(r.Uint64()) }
+func (r *kernelRandom) Int63() int64 { return int64(r.Uint64()) }
 
-func (r *KernelRandom) Int63n(n int64) int64 {
+func (r *kernelRandom) Int63n(n int64) int64 {
 	if n <= 0 {
 		panic("invalid argument to Int63n")
 	}
@@ -61,11 +61,11 @@ func (r *KernelRandom) Int63n(n int64) int64 {
 	return v % n
 }
 
-func (r *KernelRandom) Uint() uint { return uint(r.Uint64()) }
+func (r *kernelRandom) Uint() uint { return uint(r.Uint64()) }
 
-func (r *KernelRandom) Uint32() uint32 { return uint32(r.Int63() >> 31) }
+func (r *kernelRandom) Uint32() uint32 { return uint32(r.Int63() >> 31) }
 
-func (r *KernelRandom) Uint64() uint64 {
+func (r *kernelRandom) Uint64() uint64 {
 	var buf [8]byte
 	if _, err := r.Read(buf[:]); err != nil {
 		return 0
@@ -73,7 +73,7 @@ func (r *KernelRandom) Uint64() uint64 {
 	return binary.LittleEndian.Uint64(buf[:])
 }
 
-func (r *KernelRandom) Float64() float64 {
+func (r *kernelRandom) Float64() float64 {
 again:
 	f := float64(r.Int63()) / (1 << 63)
 	if f == 1 {
@@ -82,7 +82,7 @@ again:
 	return f
 }
 
-func (r *KernelRandom) Float32() float32 {
+func (r *kernelRandom) Float32() float32 {
 again:
 	f := float32(r.Float64())
 	if f == 1 {
@@ -91,7 +91,7 @@ again:
 	return f
 }
 
-func (r *KernelRandom) ExpFloat64() float64 {
+func (r *kernelRandom) ExpFloat64() float64 {
 	for {
 		j := r.Uint32()
 		i := j & 0xFF
@@ -108,7 +108,7 @@ func (r *KernelRandom) ExpFloat64() float64 {
 	}
 }
 
-func (r *KernelRandom) NormFloat64() float64 {
+func (r *kernelRandom) NormFloat64() float64 {
 	for {
 		j := int32(r.Uint32())
 		i := j & 0x7F
@@ -142,7 +142,7 @@ func (r *KernelRandom) NormFloat64() float64 {
 	}
 }
 
-func (r *KernelRandom) Perm(n int) []int {
+func (r *kernelRandom) Perm(n int) []int {
 	m := make([]int, n)
 	for i := 0; i < n; i++ {
 		j := r.Intn(i + 1)
@@ -152,14 +152,14 @@ func (r *KernelRandom) Perm(n int) []int {
 	return m
 }
 
-func (r *KernelRandom) Read(p []byte) (n int, err error) {
+func (r *kernelRandom) Read(p []byte) (n int, err error) {
 	if r.once.Do(r.init); r.err != nil {
 		return 0, r.err
 	}
 	return r.f.Read(p)
 }
 
-func (r *KernelRandom) Shuffle(n int, swap func(i, j int)) {
+func (r *kernelRandom) Shuffle(n int, swap func(i, j int)) {
 	if n < 0 {
 		panic("invalid argument to Shuffle")
 	}
@@ -175,7 +175,7 @@ func (r *KernelRandom) Shuffle(n int, swap func(i, j int)) {
 	}
 }
 
-func (r *KernelRandom) int31n(n int32) int32 {
+func (r *kernelRandom) int31n(n int32) int32 {
 	v := r.Uint32()
 	prod := uint64(v) * uint64(n)
 	low := uint32(prod)
@@ -190,6 +190,6 @@ func (r *KernelRandom) int31n(n int32) int32 {
 	return int32(prod >> 32)
 }
 
-func (r *KernelRandom) init() {
+func (r *kernelRandom) init() {
 	r.f, r.err = os.Open("/dev/random")
 }
