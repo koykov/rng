@@ -13,6 +13,14 @@ type kernelRandom struct {
 	once sync.Once
 }
 
+var KernelRandom struct {
+	Concurrent kernelRandomConcurrent
+}
+
+func NewKernelRandom() Interface {
+	return &kernelRandom{}
+}
+
 func (r *kernelRandom) Seed(_ int64) {}
 
 func (r *kernelRandom) Int() int { return int(uint(r.Int63()) << 1 >> 1) }
