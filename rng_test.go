@@ -29,16 +29,16 @@ func TestRNG(t *testing.T) {
 	}
 	t.Run("kernel/random", func(t *testing.T) {
 		t.Run("sync", func(t *testing.T) {
-			t.Run("1", func(t *testing.T) { testfn(t, &KernelRandom, 1, false) })
-			t.Run("10", func(t *testing.T) { testfn(t, &KernelRandom, 1, false) })
-			t.Run("100", func(t *testing.T) { testfn(t, &KernelRandom, 1, false) })
-			t.Run("1000", func(t *testing.T) { testfn(t, &KernelRandom, 1, false) })
+			t.Run("1", func(t *testing.T) { testfn(t, KernelRandom, 1, false) })
+			t.Run("10", func(t *testing.T) { testfn(t, KernelRandom, 10, false) })
+			t.Run("100", func(t *testing.T) { testfn(t, KernelRandom, 100, false) })
+			t.Run("1000", func(t *testing.T) { testfn(t, KernelRandom, 1000, false) })
 		})
 		t.Run("async", func(t *testing.T) {
-			t.Run("1", func(t *testing.T) { testfn(t, &KernelRandom, 1, true) })
-			t.Run("10", func(t *testing.T) { testfn(t, &KernelRandom, 1, true) })
-			t.Run("100", func(t *testing.T) { testfn(t, &KernelRandom, 1, true) })
-			t.Run("1000", func(t *testing.T) { testfn(t, &KernelRandom, 1, true) })
+			t.Run("1", func(t *testing.T) { testfn(t, KernelRandom, 1, true) })
+			t.Run("10", func(t *testing.T) { testfn(t, KernelRandom, 10, true) })
+			t.Run("100", func(t *testing.T) { testfn(t, KernelRandom, 100, true) })
+			t.Run("1000", func(t *testing.T) { testfn(t, KernelRandom, 1000, true) })
 		})
 	})
 }

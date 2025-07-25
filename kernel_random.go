@@ -13,10 +13,12 @@ type kernelRandom struct {
 	once sync.Once
 }
 
-var KernelRandom struct {
+type kernelRandomWrapper struct {
 	kernelRandom
 	Concurrent kernelRandomConcurrent
 }
+
+var KernelRandom = &kernelRandomWrapper{}
 
 func NewKernelRandom() Interface {
 	return &kernelRandom{}
