@@ -1,6 +1,7 @@
 package rng
 
 import (
+	"strconv"
 	"sync"
 	"testing"
 )
@@ -27,18 +28,17 @@ func TestRNG(t *testing.T) {
 			}
 		}
 	}
+	testgroup := func(t *testing.T, rng Interface, async bool, steps ...int) {
+		for _, step := range steps {
+			t.Run(strconv.Itoa(step), func(t *testing.T) { testfn(t, rng, step, async) })
+		}
+	}
 	t.Run("kernel/random", func(t *testing.T) {
 		t.Run("sync", func(t *testing.T) {
-			t.Run("1", func(t *testing.T) { testfn(t, KernelRandom, 1, false) })
-			t.Run("10", func(t *testing.T) { testfn(t, KernelRandom, 10, false) })
-			t.Run("100", func(t *testing.T) { testfn(t, KernelRandom, 100, false) })
-			t.Run("1000", func(t *testing.T) { testfn(t, KernelRandom, 1000, false) })
+			testgroup(t, KernelRandom, false, 1, 10, 100, 1000)
 		})
 		t.Run("async", func(t *testing.T) {
-			t.Run("1", func(t *testing.T) { testfn(t, KernelRandom, 1, true) })
-			t.Run("10", func(t *testing.T) { testfn(t, KernelRandom, 10, true) })
-			t.Run("100", func(t *testing.T) { testfn(t, KernelRandom, 100, true) })
-			t.Run("1000", func(t *testing.T) { testfn(t, KernelRandom, 1000, true) })
+			testgroup(t, KernelRandom, true, 1, 10, 100, 1000)
 		})
 	})
 }
