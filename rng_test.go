@@ -45,9 +45,21 @@ func TestRNG(t *testing.T) {
 
 func BenchmarkRNG(b *testing.B) {
 	b.Run("kernel/random", func(b *testing.B) {
-		b.ReportAllocs()
-		for i := 0; i < b.N; i++ {
-			_ = KernelRandom.Int63()
-		}
+		b.Run("sync", func(b *testing.B) {
+			b.ReportAllocs()
+			for i := 0; i < b.N; i++ {
+				_ = KernelRandom.Int63()
+			}
+		})
+		b.Run("async", func(b *testing.B) {
+			b.ReportAllocs()
+			b.RunParallel(func(pb *testing.PB) {
+				for pb.Next() {
+					if KernelRandom.Int63() == 0 {
+						b.Error()
+					}
+				}
+			})
+		})
 	})
 }
