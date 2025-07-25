@@ -14,6 +14,7 @@ type kernelRandom struct {
 }
 
 var KernelRandom struct {
+	kernelRandom
 	Concurrent kernelRandomConcurrent
 }
 
