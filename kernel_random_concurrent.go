@@ -7,7 +7,8 @@ import (
 )
 
 type kernelRandomConcurrent struct {
-	p sync.Pool
+	fp string
+	p  sync.Pool
 }
 
 func (r *kernelRandomConcurrent) Seed(_ int64) {}
@@ -119,16 +120,16 @@ func (r *kernelRandomConcurrent) NormFloat64() (x float64) {
 func (r *kernelRandomConcurrent) get() *kernelRandom {
 	raw := r.p.Get()
 	if raw == nil {
-		return &kernelRandom{fp: fpDevRandom}
+		return &kernelRandom{fp: r.fp}
 	}
 	f := raw.(*os.File)
 	// check closed file
 	if _, err := f.Seek(0, io.SeekStart); err != nil {
 		_ = f.Close()
 		// return empty object to open file again
-		return &kernelRandom{fp: fpDevRandom}
+		return &kernelRandom{fp: r.fp}
 	}
-	rng := &kernelRandom{fp: fpDevRandom, f: f}
+	rng := &kernelRandom{fp: r.fp, f: f}
 	rng.once.Do(func() {})
 	return rng
 }

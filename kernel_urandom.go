@@ -2,16 +2,18 @@ package rng
 
 const fpDevUrandom = "/dev/urandom"
 
-type kernelUrandom = kernelRandom
-
 type kernelUrandomWrapper struct {
-	kernelUrandom
+	kernelRandom
+	Concurrent kernelRandomConcurrent
 }
 
-var KernelUrandom = &kernelUrandomWrapper{kernelUrandom: kernelUrandom{fp: fpDevUrandom}}
+var KernelUrandom = &kernelUrandomWrapper{
+	kernelRandom: kernelRandom{fp: fpDevUrandom},
+	Concurrent:   kernelRandomConcurrent{fp: fpDevUrandom},
+}
 
 func NewKernelUrandom() Interface {
-	return &kernelUrandom{fp: fpDevUrandom}
+	return &kernelRandom{fp: fpDevUrandom}
 }
 
 var _ = NewKernelUrandom
