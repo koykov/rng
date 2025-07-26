@@ -11,7 +11,7 @@ type kernelUrandomWrapper struct {
 var KernelUrandom = &kernelUrandomWrapper{kernelUrandom: kernelUrandom{fp: fpDevUrandom}}
 
 func NewKernelUrandom() Interface {
-	return &kernelRandom{fp: fpDevUrandom}
+	return &kernelUrandom{fp: fpDevUrandom}
 }
 
 var _ = NewKernelUrandom
