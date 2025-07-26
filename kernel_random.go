@@ -204,3 +204,5 @@ func (r *kernelRandom) int31n(n int32) int32 {
 func (r *kernelRandom) init() {
 	r.f, r.err = os.Open("/dev/random")
 }
+
+var _ = NewKernelRandom
