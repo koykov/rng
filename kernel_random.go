@@ -7,7 +7,10 @@ import (
 	"sync"
 )
 
+const fpDevRandom = "/dev/random"
+
 type kernelRandom struct {
+	fp   string
 	f    *os.File
 	err  error
 	once sync.Once
@@ -18,10 +21,10 @@ type kernelRandomWrapper struct {
 	Concurrent kernelRandomConcurrent
 }
 
-var KernelRandom = &kernelRandomWrapper{}
+var KernelRandom = &kernelRandomWrapper{kernelRandom: kernelRandom{fp: fpDevRandom}}
 
 func NewKernelRandom() Interface {
-	return &kernelRandom{}
+	return &kernelRandom{fp: fpDevRandom}
 }
 
 func (r *kernelRandom) Seed(_ int64) {}
@@ -202,7 +205,7 @@ func (r *kernelRandom) int31n(n int32) int32 {
 }
 
 func (r *kernelRandom) init() {
-	r.f, r.err = os.Open("/dev/random")
+	r.f, r.err = os.Open(r.fp)
 }
 
 var _ = NewKernelRandom

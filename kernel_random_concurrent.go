@@ -119,16 +119,16 @@ func (r *kernelRandomConcurrent) NormFloat64() (x float64) {
 func (r *kernelRandomConcurrent) get() *kernelRandom {
 	raw := r.p.Get()
 	if raw == nil {
-		return &kernelRandom{}
+		return &kernelRandom{fp: fpDevRandom}
 	}
 	f := raw.(*os.File)
 	// check closed file
 	if _, err := f.Seek(0, io.SeekStart); err != nil {
 		_ = f.Close()
 		// return empty object to open file again
-		return &kernelRandom{}
+		return &kernelRandom{fp: fpDevRandom}
 	}
-	rng := &kernelRandom{f: f}
+	rng := &kernelRandom{fp: fpDevRandom, f: f}
 	rng.once.Do(func() {})
 	return rng
 }
