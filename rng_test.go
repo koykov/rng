@@ -38,7 +38,7 @@ func TestRNG(t *testing.T) {
 			testgroup(t, KernelRandom, false, 1, 10, 100, 1000)
 		})
 		t.Run("async", func(t *testing.T) {
-			testgroup(t, KernelRandom, true, 1, 10, 100, 1000)
+			testgroup(t, KernelRandom.Concurrent, true, 1, 10, 100, 1000)
 		})
 	})
 	t.Run("kernel/urandom", func(t *testing.T) {
@@ -46,21 +46,15 @@ func TestRNG(t *testing.T) {
 			testgroup(t, KernelUrandom, false, 1, 10, 100, 1000)
 		})
 		t.Run("async", func(t *testing.T) {
-			testgroup(t, KernelUrandom, true, 1, 10, 100, 1000)
+			testgroup(t, KernelUrandom.Concurrent, true, 1, 10, 100, 1000)
 		})
 	})
 }
 
 func BenchmarkRNG(b *testing.B) {
-	b.Run("kernel/random", func(b *testing.B) {
-		b.Run("sync", func(b *testing.B) {
-			b.ReportAllocs()
-			for i := 0; i < b.N; i++ {
-				_ = KernelRandom.Int63()
-			}
-		})
-		b.Run("async", func(b *testing.B) {
-			b.ReportAllocs()
+	benchfn := func(b *testing.B, rng Interface, async bool) {
+		b.ReportAllocs()
+		if async {
 			b.RunParallel(func(pb *testing.PB) {
 				for pb.Next() {
 					if KernelRandom.Int63() == 0 {
@@ -68,24 +62,18 @@ func BenchmarkRNG(b *testing.B) {
 					}
 				}
 			})
-		})
+			return
+		}
+		for i := 0; i < b.N; i++ {
+			_ = KernelRandom.Int63()
+		}
+	}
+	b.Run("kernel/random", func(b *testing.B) {
+		b.Run("sync", func(b *testing.B) { benchfn(b, KernelRandom, false) })
+		b.Run("async", func(b *testing.B) { benchfn(b, KernelRandom, true) })
 	})
 	b.Run("kernel/urandom", func(b *testing.B) {
-		b.Run("sync", func(b *testing.B) {
-			b.ReportAllocs()
-			for i := 0; i < b.N; i++ {
-				_ = KernelUrandom.Int63()
-			}
-		})
-		b.Run("async", func(b *testing.B) {
-			b.ReportAllocs()
-			b.RunParallel(func(pb *testing.PB) {
-				for pb.Next() {
-					if KernelUrandom.Int63() == 0 {
-						b.Error()
-					}
-				}
-			})
-		})
+		b.Run("sync", func(b *testing.B) { benchfn(b, KernelUrandom.Concurrent, false) })
+		b.Run("async", func(b *testing.B) { benchfn(b, KernelUrandom.Concurrent, true) })
 	})
 }
