@@ -21,10 +21,7 @@ type kernelRandomWrapper struct {
 	Concurrent *kernelRandomConcurrent
 }
 
-var KernelRandom = &kernelRandomWrapper{
-	kernelRandom: kernelRandom{fp: fpDevRandom},
-	Concurrent:   &kernelRandomConcurrent{fp: fpDevRandom},
-}
+var KernelRandom = NewKernelRandom().(*kernelRandomWrapper)
 
 func NewKernelRandom() Interface {
 	return &kernelRandomWrapper{
@@ -213,5 +210,3 @@ func (r *kernelRandom) int31n(n int32) int32 {
 func (r *kernelRandom) init() {
 	r.f, r.err = os.Open(r.fp)
 }
-
-var _ = NewKernelRandom
