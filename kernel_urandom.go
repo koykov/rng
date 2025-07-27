@@ -2,7 +2,10 @@ package rng
 
 const fpDevUrandom = "/dev/urandom"
 
-var KernelUrandom = NewKernelUrandom().(*kernelRandomWrapper)
+var KernelUrandom = &kernelRandomWrapper{
+	kernelRandom: kernelRandom{fp: fpDevUrandom},
+	Concurrent:   &kernelRandomConcurrent{fp: fpDevUrandom},
+}
 
 func NewKernelUrandom() Interface {
 	return &kernelRandomWrapper{
@@ -10,3 +13,5 @@ func NewKernelUrandom() Interface {
 		Concurrent:   &kernelRandomConcurrent{fp: fpDevUrandom},
 	}
 }
+
+var _ = NewKernelUrandom
