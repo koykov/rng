@@ -18,16 +18,19 @@ type kernelRandom struct {
 
 type kernelRandomWrapper struct {
 	kernelRandom
-	Concurrent kernelRandomConcurrent
+	Concurrent *kernelRandomConcurrent
 }
 
 var KernelRandom = &kernelRandomWrapper{
 	kernelRandom: kernelRandom{fp: fpDevRandom},
-	Concurrent:   kernelRandomConcurrent{fp: fpDevRandom},
+	Concurrent:   &kernelRandomConcurrent{fp: fpDevRandom},
 }
 
 func NewKernelRandom() Interface {
-	return &kernelRandom{fp: fpDevRandom}
+	return &kernelRandomWrapper{
+		kernelRandom: kernelRandom{fp: fpDevRandom},
+		Concurrent:   &kernelRandomConcurrent{fp: fpDevRandom},
+	}
 }
 
 func (r *kernelRandom) Seed(_ int64) {}
