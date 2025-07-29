@@ -33,4 +33,9 @@ func TestUniformity(t *testing.T) {
 			testgroup(t, KernelRandom, 1e6, 10, 20, 50, 100)
 		})
 	})
+	t.Run("kernel/urandom", func(t *testing.T) {
+		t.Run("sync", func(t *testing.T) {
+			testgroup(t, KernelUrandom, 1e6, 10, 20, 50, 100)
+		})
+	})
 }
