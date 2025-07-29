@@ -34,7 +34,7 @@ func NewKernelRandom() Interface {
 	}
 }
 
-var _ = NewKernelRandom()
+var _ = NewKernelRandom
 
 func (r *kernelRandom) Seed(_ int64) {}
 
