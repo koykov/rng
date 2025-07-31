@@ -1,7 +1,65 @@
 package rng
 
+import (
+	"math"
+	"strconv"
+	"testing"
+)
+
+func TestChiSquare(t *testing.T) {
+	testfn := func(t *testing.T, rng Interface, n, bins int, p float64) {
+		dist := make([]float64, bins)
+		for i := 0; i < n; i++ {
+			r := math.Abs(rng.Float64())
+			idx := int(r * float64(bins))
+			if idx >= bins {
+				idx = bins - 1
+			}
+			dist[idx]++
+		}
+
+		dfcol, ok := chiSquarePTable[p]
+		if !ok {
+			panic("p not found")
+		}
+		dfrow, ok := chiSquareTable[bins-1]
+		if !ok {
+			panic("df not found")
+		}
+		df := dfrow[dfcol]
+
+		expected := float64(len(dist)) / float64(bins)
+		chi2 := 0.0
+		for i := 0; i < len(dist); i++ {
+			chi2 += math.Pow(dist[i]-expected, 2) / expected
+		}
+
+		if chi2 >= df {
+			t.Errorf("chi2 %f overflows critical value %f", chi2, df)
+		}
+	}
+	testgroup := func(t *testing.T, rng Interface, n int, p float64, steps ...int) {
+		for _, step := range steps {
+			t.Run(strconv.Itoa(step), func(t *testing.T) { testfn(t, rng, n, step, p) })
+		}
+	}
+	t.Run("kernel/random", func(t *testing.T) {
+		t.Run("sync", func(t *testing.T) {
+			testgroup(t, KernelRandom, 1e6, 0.05, 3.0, 10, 20, 50, 100)
+		})
+	})
+	t.Run("kernel/urandom", func(t *testing.T) {
+		t.Run("sync", func(t *testing.T) {
+			testgroup(t, KernelUrandom, 1e6, 0.05, 3.0, 10, 20, 50, 100)
+		})
+	})
+}
+
 // source: https://www.medcalc.org/manual/chi-square-table.php
 // P: [0.995, 0.975, 0.20, 0.10, 0.05, 0.025, 0.02, 0.01, 0.005, 0.002, 0.001]
+var chiSquarePTable = map[float64]int{
+	0.995: 0, 0.975: 1, 0.20: 2, 0.10: 3, 0.05: 4, 0.025: 5, 0.02: 6, 0.01: 7, 0.005: 8, 0.002: 9, 0.001: 10,
+}
 var chiSquareTable = map[int][]float64{ // map[DF]values
 	1:    {0.0000393, 0.000982, 1.642, 2.706, 3.841, 5.024, 5.412, 6.635, 7.879, 9.550, 10.828},
 	2:    {0.0100, 0.0506, 3.219, 4.605, 5.991, 7.378, 7.824, 9.210, 10.597, 12.429, 13.816},
