@@ -18,6 +18,12 @@ func TestChiSquare(t *testing.T) {
 			dist[idx]++
 		}
 
+		expected := float64(len(dist)) / float64(bins)
+		var chi2 float64
+		for i := 0; i < len(dist); i++ {
+			chi2 += math.Pow(dist[i]-expected, 2) / expected
+		}
+
 		dfcol, ok := chiSquarePTable[p]
 		if !ok {
 			panic("p not found")
@@ -27,12 +33,6 @@ func TestChiSquare(t *testing.T) {
 			panic("df not found")
 		}
 		df := dfrow[dfcol]
-
-		expected := float64(len(dist)) / float64(bins)
-		chi2 := 0.0
-		for i := 0; i < len(dist); i++ {
-			chi2 += math.Pow(dist[i]-expected, 2) / expected
-		}
 
 		if chi2 >= df {
 			t.Errorf("chi2 %f overflows critical value %f", chi2, df)
