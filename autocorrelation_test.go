@@ -40,13 +40,9 @@ func TestAutocorrelation(t *testing.T) {
 		}
 	}
 	t.Run("kernel/random", func(t *testing.T) {
-		t.Run("sync", func(t *testing.T) {
-			testgroup(t, KernelRandom, 1e6, 1, 10, 100, 10000)
-		})
+		testgroup(t, KernelRandom, 1e6, 1, 10, 100, 10000)
 	})
 	t.Run("kernel/urandom", func(t *testing.T) {
-		t.Run("sync", func(t *testing.T) {
-			testgroup(t, KernelUrandom, 1e6, 1, 10, 100, 10000)
-		})
+		testgroup(t, KernelUrandom, 1e6, 1, 10, 100, 10000)
 	})
 }

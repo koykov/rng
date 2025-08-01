@@ -41,13 +41,9 @@ func TestKolmogorovSmirnov(t *testing.T) {
 		}
 	}
 	t.Run("kernel/random", func(t *testing.T) {
-		t.Run("sync", func(t *testing.T) {
-			testgroup(t, KernelRandom, 1e6, 0.05, 0.01)
-		})
+		testgroup(t, KernelRandom, 1e6, 0.05, 0.01)
 	})
 	t.Run("kernel/urandom", func(t *testing.T) {
-		t.Run("sync", func(t *testing.T) {
-			testgroup(t, KernelUrandom, 1e6, 0.05, 0.01)
-		})
+		testgroup(t, KernelUrandom, 1e6, 0.05, 0.01)
 	})
 }
