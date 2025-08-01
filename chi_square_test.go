@@ -18,7 +18,7 @@ func TestChiSquare(t *testing.T) {
 			dist[idx]++
 		}
 
-		expected := float64(len(dist)) / float64(bins)
+		expected := float64(n) / float64(bins)
 		var chi2 float64
 		for i := 0; i < len(dist); i++ {
 			chi2 += math.Pow(dist[i]-expected, 2) / expected
