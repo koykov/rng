@@ -21,7 +21,7 @@ func TestUniformity(t *testing.T) {
 		exp := n / bins
 		for i := 0; i < len(dist); i++ {
 			if r := 100 * float64(dist[i]-exp) / float64(exp); r < min || r > max {
-				t.Errorf("%d: %d - value out of min/max range %.2f%%", i, dist[i], 100*float64(dist[i]-exp)/float64(exp))
+				t.Errorf("%d: %d - value out of min/max range %.2f%%", i, dist[i], r)
 			}
 		}
 	}
