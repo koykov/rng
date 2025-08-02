@@ -66,3 +66,24 @@
 │   └── AMD ROCm-RAND
 └── **Quantum-simulated PRNG**
 └── Quantum algorithm emulators (software-only)
+
+## Tests
+├── Runs Test
+├── Monobit Test
+├── Berlekamp-Massey Algorithm
+├── Entropy Test
+├── Birthday Spacing Test
+├── Avalanche Test
+├── Batteries
+│   ├── Diehard Tests (Marsaglia)
+|   │   ├── Overlapping Permutations
+|   │   ├── Binary Rank Test
+|   │   └── Parking Lot Test.
+│   ├── TestU01 (L’Ecuyer)
+|   │   ├── SmallCrush
+|   │   ├── Crush
+|   │   └── BigCrush
+│   └── NIST STS
+├── Spectral Test
+├── Ziggurat Test
+└── Collision Test
