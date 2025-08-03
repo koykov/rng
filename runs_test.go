@@ -39,9 +39,10 @@ func TestRuns(t *testing.T) {
 	}
 	testgroup := func(t *testing.T, rng Interface, n int) {
 		t.Run("", func(t *testing.T) {
+			const limit = 0.05
 			_, pValue := testfn(rng, n)
-			if pValue < 0.05 {
-				t.Errorf("pValue (%f) must be less than %f", pValue, 0.05)
+			if pValue < limit {
+				t.Errorf("pValue (%f) must be less than %f", pValue, limit)
 			}
 		})
 	}
