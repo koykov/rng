@@ -8,7 +8,7 @@ import (
 )
 
 func TestRuns(t *testing.T) {
-	testfn := func(rng Interface, n int) (r float64) {
+	testfn := func(rng Interface, n int) (Z, pValue float64) {
 		var (
 			n0, n1, R float64
 			b, pb     uint64
@@ -33,10 +33,22 @@ func TestRuns(t *testing.T) {
 		mu := (2*n1*n0)/(n1+n0) + 1
 		sigma := math.Sqrt((2 * n1 * n0 * (2*n1*n0 - n1 - n0)) / ((n1 + n0) * math.Sqrt(n1+n0-1)))
 
-		Z := (R - mu) / sigma
-		pValue := 2 * (1 - math.Erf(math.Abs(Z)/math.Sqrt2))
-
-		return pValue
+		Z = (R - mu) / sigma
+		pValue = 2 * (1 - math.Erf(math.Abs(Z)/math.Sqrt2))
+		return
 	}
-	var _ = testfn
+	testgroup := func(t *testing.T, rng Interface, n int) {
+		t.Run("", func(t *testing.T) {
+			_, pValue := testfn(rng, n)
+			if pValue < 0.05 {
+				t.Errorf("pValue (%f) must be less than %f", pValue, 0.05)
+			}
+		})
+	}
+	t.Run("kernel/random", func(t *testing.T) {
+		testgroup(t, KernelRandom, 1e6)
+	})
+	t.Run("kernel/urandom", func(t *testing.T) {
+		testgroup(t, KernelUrandom, 1e6)
+	})
 }
