@@ -16,7 +16,9 @@ func TestRuns(t *testing.T) {
 		for i := 0; i < n; i++ {
 			v := rng.Float64()
 			u := *(*uint64)(unsafe.Pointer(&v))
-			n1 += float64(bits.OnesCount64(u))
+			t := bits.OnesCount64(u)
+			n1 += float64(t)
+			n0 += float64(64 - t)
 			for j := 0; j < 64; j++ {
 				b = (u >> j) & 1
 				if b != pb {
@@ -25,7 +27,6 @@ func TestRuns(t *testing.T) {
 				pb = b
 			}
 		}
-		n0 = float64(n) - n1
 		if n0 == n1 {
 			return // all bits are equal
 		}
