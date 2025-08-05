@@ -24,7 +24,7 @@ func TestBinaryMatrixRank(t *testing.T) {
 			row := make([]uint64, n)
 			copy(row, matrix[0])
 
-			for i := 0; i < n; i++ {
+			for i := 0; i < n && rank < n; i++ {
 				pivotRow := -1
 				for j := i; j < n; j++ {
 					if matrix[j][i] != 0 {
@@ -38,7 +38,6 @@ func TestBinaryMatrixRank(t *testing.T) {
 				}
 
 				matrix[i], matrix[pivotRow] = matrix[pivotRow], matrix[i]
-				rank++
 
 				for j := 0; j < n; j++ {
 					if j != rank && matrix[j][i] != 0 {
@@ -48,6 +47,8 @@ func TestBinaryMatrixRank(t *testing.T) {
 						}
 					}
 				}
+
+				rank++
 			}
 
 			return
