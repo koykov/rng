@@ -7,28 +7,26 @@ import (
 
 func TestBinaryMatrixRank(t *testing.T) {
 	testfn := func(rng Interface, matrixSize, numMatrices int) float64 {
-		matrices := make([][][]uint64, numMatrices)
+		matrices := make([][][]int, numMatrices)
 		for i := 0; i < numMatrices; i++ {
-			matrix := make([][]uint64, matrixSize)
+			matrix := make([][]int, matrixSize)
 			for j := 0; j < matrixSize; j++ {
-				matrix[j] = make([]uint64, matrixSize)
+				matrix[j] = make([]int, matrixSize)
 				for k := 0; k < matrixSize; k++ {
-					matrix[j][k] = rng.Uint64()
+					matrix[j][k] = rng.Intn(2)
 				}
 			}
 			matrices[i] = matrix
 		}
 
-		rankfn := func(matrix [][]uint64) (rank int) {
+		rankfn := func(matrix [][]int) (rank int) {
 			n := len(matrix)
-			row := make([]uint64, n)
-			copy(row, matrix[0])
 
 			for i := 0; i < n && rank < n; i++ {
 				pivotRow := -1
-				for j := i; j < n; j++ {
-					if matrix[j][i] != 0 {
-						pivotRow = j
+				for row := rank; row < n; row++ {
+					if matrix[row][i] == 1 {
+						pivotRow = row
 						break
 					}
 				}
@@ -37,21 +35,25 @@ func TestBinaryMatrixRank(t *testing.T) {
 					continue
 				}
 
-				matrix[i], matrix[pivotRow] = matrix[pivotRow], matrix[i]
+				matrix[rank], matrix[pivotRow] = matrix[pivotRow], matrix[rank]
+				pivot := matrix[rank][i]
+
+				for j := i; j < n; j++ {
+					matrix[rank][j] /= pivot
+				}
 
 				for j := 0; j < n; j++ {
-					if j != rank && matrix[j][i] != 0 {
+					if j != rank && matrix[j][i] == 1 {
 						coeff := matrix[j][i]
 						for k := i; k < n; k++ {
 							matrix[j][k] -= coeff * matrix[rank][k]
 						}
 					}
 				}
-
 				rank++
 			}
 
-			return
+			return rank
 		}
 		rankCounts := make(map[int]int)
 		for i := 0; i < numMatrices; i++ {
