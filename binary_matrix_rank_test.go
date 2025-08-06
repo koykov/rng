@@ -22,7 +22,7 @@ func TestBinaryMatrixRank(t *testing.T) {
 		rankfn := func(matrix [][]int) (rank int) {
 			n := len(matrix)
 
-			for i := 0; i < n && rank < n; i++ {
+			for i := 0; i < n; i++ {
 				pivotRow := -1
 				for row := rank; row < n; row++ {
 					if matrix[row][i] == 1 {
@@ -42,11 +42,11 @@ func TestBinaryMatrixRank(t *testing.T) {
 					matrix[rank][j] /= pivot
 				}
 
-				for j := 0; j < n; j++ {
+				for j := i + 1; j < n; j++ {
 					if j != rank && matrix[j][i] == 1 {
-						coeff := matrix[j][i]
+						// coeff := matrix[j][i]
 						for k := i; k < n; k++ {
-							matrix[j][k] -= coeff * matrix[rank][k]
+							matrix[j][k] ^= matrix[i][k]
 						}
 					}
 				}
