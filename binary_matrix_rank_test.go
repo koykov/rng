@@ -101,8 +101,9 @@ func TestBinaryMatrixRank(t *testing.T) {
 	}
 	testgroup := func(t *testing.T, rng Interface, matrixSize, numMatrices int) {
 		t.Run("", func(t *testing.T) {
-			p := testfn(rng, matrixSize, numMatrices)
-			if p < 0.05 {
+			const limit = 0.05
+			pValue := testfn(rng, matrixSize, numMatrices)
+			if pValue < limit {
 				t.Fail()
 			}
 		})
