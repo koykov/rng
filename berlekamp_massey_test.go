@@ -1,6 +1,7 @@
 package rng
 
 import (
+	"strconv"
 	"testing"
 )
 
@@ -16,46 +17,53 @@ func TestBerlekampMassey(t *testing.T) {
 		c[0], b[0] = 1, 1
 
 		var L, m int
-		var delta int
-		var T []int
+		var delta, mask int
 
-		for N := 0; N < n; N++ {
-
-			delta = raw[N]
+		for nIter := 0; nIter < n; nIter++ {
+			delta = raw[nIter]
 			for i := 1; i <= L; i++ {
-				delta ^= c[i] & raw[N-i]
+				delta ^= c[i] & raw[nIter-i]
 			}
 
 			if delta == 1 {
+				t_ := make([]int, n)
+				copy(t_, c)
 
-				T = make([]int, n)
-				copy(T, c)
-
-				for i := 0; i < n-(N-m); i++ {
-					c[N-m+i] ^= b[i]
+				mask = 1
+				shift := nIter - m
+				for i := 0; i < n; i++ {
+					if i+shift < n {
+						c[i+shift] ^= b[i] & mask
+					}
 				}
 
-				if 2*L <= N {
-					L = N + 1 - L
-					m = N
-					copy(b, T)
+				if L <= nIter/2 {
+					L = nIter + 1 - L
+					m = nIter
+					copy(b, t_)
 				}
 			}
 		}
 
-		return c[:L+1]
+		res := make([]int, L+1)
+		copy(res, c[:L+1])
+		return res
 	}
-	testgroup := func(t *testing.T, rng Interface, n int) {
-		t.Run("", func(t *testing.T) {
-			lsfr := testfn(rng, n)
-			// todo implement me
-			_ = lsfr
-		})
+	testgroup := func(t *testing.T, rng Interface, steps ...int) {
+		for _, step := range steps {
+			t.Run(strconv.Itoa(step), func(t *testing.T) {
+				lsfr := testfn(rng, step)
+				rate := float64(len(lsfr)) / float64(step)
+				if rate <= 0.5 {
+					t.Errorf("LSFR rate %f too small", rate)
+				}
+			})
+		}
 	}
 	t.Run("kernel/random", func(t *testing.T) {
-		testgroup(t, KernelRandom, 1e6)
+		testgroup(t, KernelRandom, 10, 100, 1000, 10000)
 	})
 	t.Run("kernel/urandom", func(t *testing.T) {
-		testgroup(t, KernelUrandom, 1e6)
+		testgroup(t, KernelUrandom, 10, 100, 1000, 10000)
 	})
 }
