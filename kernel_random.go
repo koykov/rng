@@ -1,7 +1,10 @@
 package rng
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
 	"encoding/binary"
+	"hash"
 	"io"
 	"math"
 	"os"
@@ -11,10 +14,14 @@ import (
 const fpDevRandom = "/dev/random"
 
 type kernelRandom struct {
-	fp   string
-	f    *os.File
-	err  error
-	once sync.Once
+	fp        string
+	f         *os.File
+	seed      int64
+	bseed     []byte
+	buf, hbuf []byte
+	mac       hash.Hash
+	err       error
+	once      sync.Once
 }
 
 type kernelRandomWrapper struct {
@@ -36,7 +43,7 @@ func NewKernelRandom() Interface {
 
 var _ = NewKernelRandom
 
-func (r *kernelRandom) Seed(_ int64) {}
+func (r *kernelRandom) Seed(seed int64) { r.seed = seed }
 
 func (r *kernelRandom) Int() int { return int(uint(r.Int63()) << 1 >> 1) }
 
@@ -89,11 +96,14 @@ func (r *kernelRandom) Uint() uint { return uint(r.Uint64()) }
 func (r *kernelRandom) Uint32() uint32 { return uint32(r.Int63() >> 31) }
 
 func (r *kernelRandom) Uint64() uint64 {
-	var buf [8]byte
-	if _, err := r.Read(buf[:]); err != nil {
+	if _, err := r.Read(r.buf); err != nil {
 		return 0
 	}
-	return binary.LittleEndian.Uint64(buf[:])
+	r.mac.Reset()
+	r.mac.Write(r.bseed)
+	r.mac.Write(r.buf)
+	r.hbuf = r.mac.Sum(r.hbuf[:0])
+	return binary.LittleEndian.Uint64(r.hbuf[:8])
 }
 
 func (r *kernelRandom) Float64() float64 {
@@ -214,7 +224,13 @@ func (r *kernelRandom) int31n(n int32) int32 {
 }
 
 func (r *kernelRandom) init() {
-	r.f, r.err = os.Open(r.fp)
+	if r.f, r.err = os.Open(r.fp); r.err != nil {
+		return
+	}
+	r.buf = make([]byte, 8)
+	r.bseed = make([]byte, 8)
+	binary.LittleEndian.PutUint64(r.bseed, uint64(r.seed))
+	r.mac = hmac.New(sha256.New, r.bseed)
 }
 
 // concurrent stuff
@@ -343,7 +359,7 @@ func (r *kernelRandomConcurrent) get() *kernelRandom {
 		return &kernelRandom{fp: r.fp}
 	}
 	rng := &kernelRandom{fp: r.fp, f: f}
-	rng.once.Do(func() {})
+	rng.once.Do(rng.init)
 	return rng
 }
 
