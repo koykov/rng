@@ -57,7 +57,7 @@ func BenchmarkRNG(b *testing.B) {
 		if async {
 			b.RunParallel(func(pb *testing.PB) {
 				for pb.Next() {
-					if KernelRandom.Int63() == 0 {
+					if rng.Int63() == 0 {
 						b.Error()
 					}
 				}
@@ -65,15 +65,15 @@ func BenchmarkRNG(b *testing.B) {
 			return
 		}
 		for i := 0; i < b.N; i++ {
-			_ = KernelRandom.Int63()
+			_ = rng.Int63()
 		}
 	}
 	b.Run("kernel/random", func(b *testing.B) {
 		b.Run("sync", func(b *testing.B) { benchfn(b, KernelRandom, false) })
-		b.Run("async", func(b *testing.B) { benchfn(b, KernelRandom, true) })
+		b.Run("async", func(b *testing.B) { benchfn(b, KernelRandom.Concurrent, true) })
 	})
 	b.Run("kernel/urandom", func(b *testing.B) {
-		b.Run("sync", func(b *testing.B) { benchfn(b, KernelUrandom.Concurrent, false) })
+		b.Run("sync", func(b *testing.B) { benchfn(b, KernelUrandom, false) })
 		b.Run("async", func(b *testing.B) { benchfn(b, KernelUrandom.Concurrent, true) })
 	})
 }
