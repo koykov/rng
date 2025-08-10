@@ -43,7 +43,12 @@ func NewKernelRandom() Interface {
 
 var _ = NewKernelRandom
 
-func (r *kernelRandom) Seed(seed int64) { r.seed = seed }
+func (r *kernelRandom) Seed(seed int64) {
+	r.seed = seed
+	r.bseed = make([]byte, 8)
+	binary.LittleEndian.PutUint64(r.bseed, uint64(r.seed))
+	r.mac = hmac.New(sha256.New, r.bseed)
+}
 
 func (r *kernelRandom) Int() int { return int(uint(r.Int63()) << 1 >> 1) }
 
@@ -228,9 +233,7 @@ func (r *kernelRandom) init() {
 		return
 	}
 	r.buf = make([]byte, 8)
-	r.bseed = make([]byte, 8)
-	binary.LittleEndian.PutUint64(r.bseed, uint64(r.seed))
-	r.mac = hmac.New(sha256.New, r.bseed)
+	r.Seed(r.seed)
 }
 
 // concurrent stuff
