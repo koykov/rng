@@ -76,9 +76,20 @@
 ├── Avalanche Test
 ├── Batteries
 │   ├── Diehard Tests (Marsaglia)
-|   │   ├── Overlapping Permutations
-|   │   ├── Binary Rank Test
-|   │   └── Parking Lot Test.
+|   │   ├── Birthday Spacing Test +
+|   │   ├── Overlapping Permutations Test
+|   │   ├── Ranks of 31×31 and 32×32 Matrices
+|   │   ├── Ranks of 6×8 Matrices
+|   │   ├── Monkey Tests
+|   │   |   ├── Count-the-1’s Test
+|   │   |   └── Parking Lot Test
+|   │   ├── Minimum Distance Test
+|   │   ├── Random Spheres Test
+|   │   ├── The Squeeze Test
+|   │   ├── Overlapping Sums Test
+|   │   ├── Runs Test +
+|   │   ├── The Craps Test
+|   │   └── Marsaglia and Tsang’s GCD Test
 │   ├── TestU01 (L’Ecuyer)
 |   │   ├── SmallCrush
 |   │   ├── Crush
