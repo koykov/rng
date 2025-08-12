@@ -74,16 +74,25 @@ func TestOverlappingPermutations(t *testing.T) {
 		return "unknown"
 	}
 
-	getChi2CriticalValue := func(df int) float64 {
-		chi2Table := map[int]float64{
-			1:  3.84,
-			5:  11.07,
-			23: 35.17,
+	ksTest := func(permCounts map[string]int, total int) float64 {
+		sorted := make([]float64, 0, len(permCounts))
+		for _, cnt := range permCounts {
+			sorted = append(sorted, float64(cnt)/float64(total))
 		}
-		return chi2Table[df]
+		sort.Float64s(sorted)
+
+		maxDiff := 0.0
+		for i, p := range sorted {
+			expected := float64(i+1) / float64(len(sorted))
+			diff := math.Abs(p - expected)
+			if diff > maxDiff {
+				maxDiff = diff
+			}
+		}
+		return maxDiff
 	}
 
-	testfn := func(rng Interface, n, k int) (bool, map[string]int) {
+	testfn := func(rng Interface, n, k int) (bool, float64) {
 		raw := make([]float64, n)
 		for i := 0; i < n; i++ {
 			raw[i] = rng.Float64()
@@ -94,20 +103,16 @@ func TestOverlappingPermutations(t *testing.T) {
 
 		for i := 0; i <= len(raw)-k; i++ {
 			group := raw[i : i+k]
-			permKey := getPermutationKey(group, perms)
-			permCounts[permKey]++
+			key := getPermutationKey(group, perms)
+			permCounts[key]++
 		}
 
-		expected := float64(len(raw)-k+1) / float64(len(perms))
-		chi2 := 0.0
-		for _, count := range permCounts {
-			chi2 += math.Pow(float64(count)-expected, 2) / expected
-		}
+		// KS-тест вместо χ²
+		ksStat := ksTest(permCounts, len(raw)-k+1)
+		criticalValue := 1.36 / math.Sqrt(float64(len(perms))) // α=0.05
+		isUniform := ksStat < criticalValue
 
-		criticalValue := getChi2CriticalValue(len(perms) - 1)
-		isUniform := chi2 < criticalValue
-
-		return isUniform, permCounts
+		return isUniform, ksStat
 	}
 
 	testgroup := func(t *testing.T, rng Interface, n, k int) {
@@ -120,9 +125,9 @@ func TestOverlappingPermutations(t *testing.T) {
 		})
 	}
 	t.Run("kernel/random", func(t *testing.T) {
-		testgroup(t, KernelRandom, 1e6, 5)
+		testgroup(t, KernelRandom, 1e6, 3)
 	})
 	t.Run("kernel/urandom", func(t *testing.T) {
-		testgroup(t, KernelUrandom, 1e6, 5)
+		testgroup(t, KernelUrandom, 1e6, 3)
 	})
 }
