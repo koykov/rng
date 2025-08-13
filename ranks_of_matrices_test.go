@@ -6,31 +6,30 @@ import (
 )
 
 func TestRanksOfMatrices(t *testing.T) {
-	generateBinaryMatrix := func(rng Interface, sz int) [][]int {
-		matrix := make([][]int, sz)
+	generateBinaryMatrix := func(rng Interface, sz int) [][]uint64 {
+		matrix := make([][]uint64, sz)
 		for i := range matrix {
-			matrix[i] = make([]int, sz)
-			for j := 0; j < sz; j += 32 {
-				num := rng.Uint32()
-				for k := 0; k < 32 && j+k < sz; k++ {
-					matrix[i][j+k] = int(num>>(31-k)) & 1
-				}
+			matrix[i] = make([]uint64, (sz+63)/64)
+			for j := 0; j < len(matrix[i]); j++ {
+				num1 := rng.Uint64()
+				num2 := rng.Uint64()
+				matrix[i][j] = (num1 << 32) | num2
 			}
 		}
 		return matrix
 	}
 
-	matrixRank := func(matrix [][]int) int {
+	matrixRank := func(matrix [][]uint64) int {
 		rows := len(matrix)
 		if rows == 0 {
 			return 0
 		}
-		cols := len(matrix[0])
+		cols := len(matrix[0]) * 64
 		rank := 0
 
 		for col := 0; col < cols && rank < rows; col++ {
 			pivot := rank
-			for pivot < rows && matrix[pivot][col] == 0 {
+			for pivot < rows && (matrix[pivot][col/64]>>(63-col%64))&1 == 0 {
 				pivot++
 			}
 			if pivot == rows {
@@ -40,8 +39,8 @@ func TestRanksOfMatrices(t *testing.T) {
 			matrix[rank], matrix[pivot] = matrix[pivot], matrix[rank]
 
 			for i := 0; i < rows; i++ {
-				if i != rank && matrix[i][col] != 0 {
-					for j := col; j < cols; j++ {
+				if i != rank && (matrix[i][col/64]>>(63-col%64))&1 == 1 {
+					for j := 0; j < len(matrix[i]); j++ {
 						matrix[i][j] ^= matrix[rank][j]
 					}
 				}
