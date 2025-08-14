@@ -10,10 +10,8 @@ func TestRanksOfMatrices(t *testing.T) {
 		matrix := make([][]uint64, sz)
 		for i := range matrix {
 			matrix[i] = make([]uint64, (sz+63)/64)
-			for j := 0; j < len(matrix[i]); j++ {
-				num1 := rng.Uint64()
-				num2 := rng.Uint64()
-				matrix[i][j] = (num1 << 32) | num2
+			for j := range matrix[i] {
+				matrix[i][j] = (rng.Uint64() << 32) | rng.Uint64()
 			}
 		}
 		return matrix
@@ -29,17 +27,18 @@ func TestRanksOfMatrices(t *testing.T) {
 
 		for col := 0; col < cols && rank < rows; col++ {
 			pivot := rank
-			for pivot < rows && (matrix[pivot][col/64]>>(63-col%64))&1 == 0 {
+			for pivot < rows && (matrix[pivot][col/64]&(1<<(63-col%64))) == 0 {
 				pivot++
 			}
 			if pivot == rows {
 				continue
 			}
 
+			// Меняем строки местами
 			matrix[rank], matrix[pivot] = matrix[pivot], matrix[rank]
 
 			for i := 0; i < rows; i++ {
-				if i != rank && (matrix[i][col/64]>>(63-col%64))&1 == 1 {
+				if i != rank && (matrix[i][col/64]&(1<<(63-col%64))) != 0 {
 					for j := 0; j < len(matrix[i]); j++ {
 						matrix[i][j] ^= matrix[rank][j]
 					}
