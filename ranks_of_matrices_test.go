@@ -1,66 +1,108 @@
 package rng
 
 import (
+	"math"
 	"strconv"
 	"testing"
 )
 
 func TestRanksOfMatrices(t *testing.T) {
-	generateBinaryMatrix := func(rng Interface, sz int) [][]uint64 {
-		matrix := make([][]uint64, sz)
-		for i := range matrix {
-			matrix[i] = make([]uint64, (sz+63)/64)
-			for j := range matrix[i] {
-				matrix[i][j] = (rng.Uint64() << 32) | rng.Uint64()
-			}
-		}
-		return matrix
-	}
-
-	matrixRank := func(matrix [][]uint64) int {
-		rows := len(matrix)
-		if rows == 0 {
-			return 0
-		}
-		cols := len(matrix[0]) * 64
+	computeMatrixRank := func(matrix [][]float64) int {
+		q := len(matrix)
 		rank := 0
+		rowSelected := make([]bool, q)
 
-		for col := 0; col < cols && rank < rows; col++ {
-			pivot := rank
-			for pivot < rows && (matrix[pivot][col/64]&(1<<(63-col%64))) == 0 {
-				pivot++
+		for col := 0; col < q; col++ {
+			var pivotRow int
+			for pivotRow = 0; pivotRow < q; pivotRow++ {
+				if !rowSelected[pivotRow] && matrix[pivotRow][col] != 0 {
+					break
+				}
 			}
-			if pivot == rows {
-				continue
-			}
 
-			// Меняем строки местами
-			matrix[rank], matrix[pivot] = matrix[pivot], matrix[rank]
+			if pivotRow < q {
+				rank++
+				rowSelected[pivotRow] = true
 
-			for i := 0; i < rows; i++ {
-				if i != rank && (matrix[i][col/64]&(1<<(63-col%64))) != 0 {
-					for j := 0; j < len(matrix[i]); j++ {
-						matrix[i][j] ^= matrix[rank][j]
+				pivotVal := matrix[pivotRow][col]
+				for j := col; j < q; j++ {
+					matrix[pivotRow][j] /= pivotVal
+				}
+
+				for i := 0; i < q; i++ {
+					if i != pivotRow && matrix[i][col] != 0 {
+						scale := matrix[i][col]
+						for j := col; j < q; j++ {
+							matrix[i][j] -= scale * matrix[pivotRow][j]
+						}
 					}
 				}
 			}
-			rank++
 		}
 		return rank
 	}
 
-	testfn := func(rng Interface, sz, n int) float64 {
-		rankStats := make(map[int]int)
-		for i := 0; i < n; i++ {
-			matrix := generateBinaryMatrix(rng, sz)
-			rank := matrixRank(matrix)
-			rankStats[rank]++
+	testfn := func(rng Interface, sz, q int) float64 {
+		n := q * q * 10
+		binData := make([]float64, n)
+		for i := range binData {
+			if rng.Float64() > 0.5 {
+				binData[i] = 1.0
+			}
 		}
-		return float64(rankStats[sz]) / float64(n)
+
+		blockSize := q * q
+		numM := n / blockSize
+
+		if numM > 0 {
+			maxRanks := [3]int{}
+
+			for im := 0; im < numM; im++ {
+				matrix := make([][]float64, q)
+				for i := 0; i < q; i++ {
+					matrix[i] = make([]float64, q)
+					for j := 0; j < q; j++ {
+						idx := im*blockSize + i*q + j
+						if idx < len(binData) {
+							matrix[i][j] = binData[idx]
+						}
+					}
+				}
+
+				rank := computeMatrixRank(matrix)
+
+				switch {
+				case rank == q:
+					maxRanks[0]++
+				case rank == q-1:
+					maxRanks[1]++
+				default:
+					maxRanks[2]++
+				}
+			}
+
+			piks := [3]float64{1.0, 0.0, 0.0}
+			for x := 1; x < 50; x++ {
+				piks[0] *= 1.0 - 1.0/math.Pow(2.0, float64(x))
+			}
+			piks[1] = 2 * piks[0]
+			piks[2] = 1 - piks[0] - piks[1]
+
+			chi := 0.0
+			for i := 0; i < 3; i++ {
+				expected := piks[i] * float64(numM)
+				chi += math.Pow(float64(maxRanks[i])-expected, 2.0) / expected
+			}
+
+			return math.Exp(-chi / 2.0)
+		}
+
+		return -1.0
 	}
 	testgroup := func(t *testing.T, rng Interface, sz, n int) {
 		t.Run(strconv.Itoa(sz), func(t *testing.T) {
 			r := testfn(rng, sz, n)
+			t.Log(r)
 			if 1.0-r > 0.1 {
 				t.Fail()
 			}
