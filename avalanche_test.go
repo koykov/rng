@@ -9,10 +9,6 @@ import (
 
 func TestAvalanche(t *testing.T) {
 	testfn := func(rng Interface, n int) float64 {
-		type seederRNG interface {
-			setSeed(seed int64)
-			Uint64() uint64
-		}
 		var c int
 		seed := time.Now().UnixNano()
 		for i := 0; i < n; i++ {

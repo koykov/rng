@@ -78,8 +78,8 @@
 │   ├── Diehard Tests (Marsaglia)
 |   │   ├── Birthday Spacing Test +
 |   │   ├── Overlapping Permutations Test +
-|   │   ├── Ranks of 31×31 and 32×32 Matrices
-|   │   ├── Ranks of 6×8 Matrices
+|   │   ├── Ranks of 31×31 and 32×32 Matrices -
+|   │   ├── Ranks of 6×8 Matrices -
 |   │   ├── Monkey Tests
 |   │   |   ├── Count-the-1’s Test
 |   │   |   └── Parking Lot Test
