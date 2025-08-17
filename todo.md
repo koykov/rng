@@ -81,7 +81,7 @@
 |   │   ├── Ranks of 31×31 and 32×32 Matrices -
 |   │   ├── Ranks of 6×8 Matrices -
 |   │   ├── Monkey Tests
-|   │   |   ├── Count-the-1’s Test
+|   │   |   ├── Count-the-1’s Test +
 |   │   |   └── Parking Lot Test
 |   │   ├── Minimum Distance Test
 |   │   ├── Random Spheres Test
