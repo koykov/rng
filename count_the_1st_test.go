@@ -29,7 +29,7 @@ func TestCountThe1st(t *testing.T) {
 			t.Run(strconv.Itoa(step), func(t *testing.T) {
 				pValue, _ := testfn(rng, step, 64)
 				if pValue < 0.01 || pValue > 0.99 {
-					t.Errorf("bad rate %f", pValue)
+					t.Errorf("pValue %f outside of (0.01..0.99)", pValue)
 				}
 			})
 		}
