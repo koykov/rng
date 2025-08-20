@@ -82,7 +82,7 @@
 |   │   ├── Ranks of 6×8 Matrices -
 |   │   ├── Monkey Tests
 |   │   |   ├── Count-the-1’s Test +
-|   │   |   └── Parking Lot Test
+|   │   |   └── Parking Lot Test -
 |   │   ├── Minimum Distance Test
 |   │   ├── Random Spheres Test
 |   │   ├── The Squeeze Test
