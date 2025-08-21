@@ -83,8 +83,8 @@
 |   │   ├── Monkey Tests
 |   │   |   ├── Count-the-1’s Test +
 |   │   |   └── Parking Lot Test -
-|   │   ├── Minimum Distance Test
-|   │   ├── Random Spheres Test
+|   │   ├── Minimum Distance Test +
+|   │   ├── Random Spheres Test +
 |   │   ├── The Squeeze Test
 |   │   ├── Overlapping Sums Test
 |   │   ├── Runs Test +
