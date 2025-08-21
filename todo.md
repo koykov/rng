@@ -68,12 +68,12 @@
 └── Quantum algorithm emulators (software-only)
 
 ## Tests
-├── Runs Test
-├── Monobit Test
-├── Berlekamp-Massey Algorithm
-├── Entropy Test
-├── Birthday Spacing Test
-├── Avalanche Test
+├── Runs Test +
+├── Monobit Test +
+├── Berlekamp-Massey Algorithm +
+├── Entropy Test +
+├── Birthday Spacing Test +
+├── Avalanche Test +
 ├── Batteries
 │   ├── Diehard Tests (Marsaglia)
 |   │   ├── Birthday Spacing Test +
@@ -85,7 +85,7 @@
 |   │   |   └── Parking Lot Test -
 |   │   ├── Minimum Distance Test +
 |   │   ├── Random Spheres Test +
-|   │   ├── The Squeeze Test
+|   │   ├── The Squeeze Test +
 |   │   ├── Overlapping Sums Test
 |   │   ├── Runs Test +
 |   │   ├── The Craps Test
