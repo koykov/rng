@@ -88,7 +88,7 @@
 |   │   ├── The Squeeze Test +
 |   │   ├── Overlapping Sums Test
 |   │   ├── Runs Test +
-|   │   ├── The Craps Test
+|   │   ├── The Craps Test +
 |   │   └── Marsaglia and Tsang’s GCD Test
 │   ├── TestU01 (L’Ecuyer)
 |   │   ├── SmallCrush
