@@ -86,10 +86,10 @@
 |   │   ├── Minimum Distance Test +
 |   │   ├── Random Spheres Test +
 |   │   ├── The Squeeze Test +
-|   │   ├── Overlapping Sums Test
+|   │   ├── Overlapping Sums Test -
 |   │   ├── Runs Test +
 |   │   ├── The Craps Test +
-|   │   └── Marsaglia and Tsang’s GCD Test
+|   │   └── Marsaglia and Tsang’s GCD Test +
 │   ├── TestU01 (L’Ecuyer)
 |   │   ├── SmallCrush
 |   │   ├── Crush
