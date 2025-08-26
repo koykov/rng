@@ -25,18 +25,18 @@ type kernelRandom struct {
 }
 
 type kernelRandomWrapper struct {
-	r          *rand.Rand
+	*rand.Rand
 	Concurrent *kernelRandomConcurrent
 }
 
 var KernelRandom = &kernelRandomWrapper{
-	r:          rand.New(&kernelRandom{fp: fpDevRandom}),
+	Rand:       rand.New(&kernelRandom{fp: fpDevRandom}),
 	Concurrent: &kernelRandomConcurrent{fp: fpDevRandom},
 }
 
-func NewKernelRandom() *rand.Rand {
+func NewKernelRandom() Interface {
 	return &kernelRandomWrapper{
-		r:          rand.New(&kernelRandom{fp: fpDevRandom}),
+		Rand:       rand.New(&kernelRandom{fp: fpDevRandom}),
 		Concurrent: &kernelRandomConcurrent{fp: fpDevRandom},
 	}
 }
