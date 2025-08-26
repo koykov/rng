@@ -67,6 +67,15 @@ func (r *kernelRandom) Read(p []byte) (n int, err error) {
 	if r.once.Do(r.init); r.err != nil {
 		return 0, r.err
 	}
+	// check closed file
+	if _, err = r.f.Seek(0, io.SeekStart); err != nil {
+		_ = r.f.Close()
+		// return empty object to open file again
+		if r.f, r.err = os.Open(r.fp); r.err != nil {
+			err = r.err
+			return
+		}
+	}
 	return r.f.Read(p)
 }
 
@@ -196,14 +205,7 @@ func (r *kernelRandomConcurrent) get() *rand.Rand {
 	if raw == nil {
 		return rand.New(&kernelRandom{fp: r.fp})
 	}
-	f := raw.(*os.File)
-	// check closed file
-	if _, err := f.Seek(0, io.SeekStart); err != nil {
-		_ = f.Close()
-		// return empty object to open file again
-		return rand.New(&kernelRandom{fp: r.fp})
-	}
-	rng := rand.New(&kernelRandom{fp: r.fp, f: f})
+	rng := raw.(*rand.Rand)
 	return rng
 }
 
