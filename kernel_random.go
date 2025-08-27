@@ -26,18 +26,18 @@ type kernelRandom struct {
 
 type kernelRandomWrapper struct {
 	*rand.Rand
-	Concurrent *kernelRandomConcurrent
+	Concurrent *concurrent
 }
 
 var KernelRandom = &kernelRandomWrapper{
 	Rand:       rand.New(&kernelRandom{fp: fpDevRandom}),
-	Concurrent: &kernelRandomConcurrent{fp: fpDevRandom},
+	Concurrent: &concurrent{Pool: sync.Pool{New: func() interface{} { return rand.New(&kernelRandom{fp: fpDevRandom}) }}},
 }
 
 func NewKernelRandom() Interface {
 	return &kernelRandomWrapper{
 		Rand:       rand.New(&kernelRandom{fp: fpDevRandom}),
-		Concurrent: &kernelRandomConcurrent{fp: fpDevRandom},
+		Concurrent: &concurrent{Pool: sync.Pool{New: func() interface{} { return rand.New(&kernelRandom{fp: fpDevRandom}) }}},
 	}
 }
 
@@ -85,133 +85,4 @@ func (r *kernelRandom) init() {
 	}
 	r.buf = make([]byte, 8)
 	r.Seed(r.seed)
-}
-
-// concurrent stuff
-
-type kernelRandomConcurrent struct {
-	fp string
-	p  sync.Pool
-}
-
-func (r *kernelRandomConcurrent) Seed(_ int64) {}
-
-func (r *kernelRandomConcurrent) Int() (x int) {
-	rng := r.get()
-	defer r.put(rng)
-	x = rng.Int()
-	return
-}
-
-func (r *kernelRandomConcurrent) Intn(n int) (x int) {
-	rng := r.get()
-	defer r.put(rng)
-	x = rng.Intn(n)
-	return
-}
-
-func (r *kernelRandomConcurrent) Int31() (x int32) {
-	rng := r.get()
-	defer r.put(rng)
-	x = rng.Int31()
-	return
-}
-
-func (r *kernelRandomConcurrent) Int31n(n int32) (x int32) {
-	rng := r.get()
-	defer r.put(rng)
-	x = rng.Int31n(n)
-	return
-}
-
-func (r *kernelRandomConcurrent) Int63() (x int64) {
-	rng := r.get()
-	defer r.put(rng)
-	x = rng.Int63()
-	return
-}
-
-func (r *kernelRandomConcurrent) Int63n(n int64) (x int64) {
-	rng := r.get()
-	defer r.put(rng)
-	x = rng.Int63n(n)
-	return
-}
-
-func (r *kernelRandomConcurrent) Perm(n int) (x []int) {
-	rng := r.get()
-	defer r.put(rng)
-	x = rng.Perm(n)
-	return
-}
-
-func (r *kernelRandomConcurrent) Read(p []byte) (n int, err error) {
-	rng := r.get()
-	defer r.put(rng)
-	n, err = rng.Read(p)
-	return
-}
-
-func (r *kernelRandomConcurrent) Shuffle(n int, swap func(i, j int)) {
-	rng := r.get()
-	defer r.put(rng)
-	rng.Shuffle(n, swap)
-}
-
-func (r *kernelRandomConcurrent) Uint32() (x uint32) {
-	rng := r.get()
-	defer r.put(rng)
-	x = rng.Uint32()
-	return
-}
-
-func (r *kernelRandomConcurrent) Uint64() (x uint64) {
-	rng := r.get()
-	defer r.put(rng)
-	x = rng.Uint64()
-	return
-}
-
-func (r *kernelRandomConcurrent) Float32() (x float32) {
-	rng := r.get()
-	defer r.put(rng)
-	x = rng.Float32()
-	return
-}
-
-func (r *kernelRandomConcurrent) Float64() (x float64) {
-	rng := r.get()
-	defer r.put(rng)
-	x = rng.Float64()
-	return
-}
-
-func (r *kernelRandomConcurrent) ExpFloat64() (x float64) {
-	rng := r.get()
-	defer r.put(rng)
-	x = rng.ExpFloat64()
-	return
-}
-
-func (r *kernelRandomConcurrent) NormFloat64() (x float64) {
-	rng := r.get()
-	defer r.put(rng)
-	x = rng.NormFloat64()
-	return
-}
-
-func (r *kernelRandomConcurrent) get() *rand.Rand {
-	raw := r.p.Get()
-	if raw == nil {
-		return rand.New(&kernelRandom{fp: r.fp})
-	}
-	rng := raw.(*rand.Rand)
-	return rng
-}
-
-func (r *kernelRandomConcurrent) put(rng *rand.Rand) {
-	if rng == nil {
-		return
-	}
-	r.p.Put(rng)
 }
