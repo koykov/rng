@@ -7,13 +7,13 @@ import (
 
 const fpDevUrandom = "/dev/urandom"
 
-var KernelUrandom = &kernelRandomWrapper{
+var KernelUrandom = &wrapper{
 	Rand:       rand.New(&kernelRandom{fp: fpDevUrandom}),
 	Concurrent: &concurrent{Pool: sync.Pool{New: func() interface{} { return rand.New(&kernelRandom{fp: fpDevUrandom}) }}},
 }
 
 func NewKernelUrandom() Interface {
-	return &kernelRandomWrapper{
+	return &wrapper{
 		Rand:       rand.New(&kernelRandom{fp: fpDevUrandom}),
 		Concurrent: &concurrent{Pool: sync.Pool{New: func() interface{} { return rand.New(&kernelRandom{fp: fpDevUrandom}) }}},
 	}
