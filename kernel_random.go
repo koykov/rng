@@ -24,18 +24,13 @@ type kernelRandom struct {
 	once      sync.Once
 }
 
-type kernelRandomWrapper struct {
-	*rand.Rand
-	Concurrent *concurrent
-}
-
-var KernelRandom = &kernelRandomWrapper{
+var KernelRandom = &wrapper{
 	Rand:       rand.New(&kernelRandom{fp: fpDevRandom}),
 	Concurrent: &concurrent{Pool: sync.Pool{New: func() interface{} { return rand.New(&kernelRandom{fp: fpDevRandom}) }}},
 }
 
 func NewKernelRandom() Interface {
-	return &kernelRandomWrapper{
+	return &wrapper{
 		Rand:       rand.New(&kernelRandom{fp: fpDevRandom}),
 		Concurrent: &concurrent{Pool: sync.Pool{New: func() interface{} { return rand.New(&kernelRandom{fp: fpDevRandom}) }}},
 	}
