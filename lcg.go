@@ -44,85 +44,32 @@ type lcgContainer struct {
 	RANDU         wrapper
 }
 
-var LCG = &lcgContainer{
-	ZXSpectrum: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: 75, c: 0, m: 65537}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: 75, c: 0, m: 65537}) }}},
-	},
-	Ranqd1: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: 1664525, c: 1013904223, m: 4294967296}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: 1664525, c: 1013904223, m: 4294967296}) }}},
-	},
-	BorlandCpp: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: 22695477, c: 1, m: 2147483648}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: 22695477, c: 1, m: 2147483648}) }}},
-	},
-	BorlandDelphi: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: 134775813, c: 1, m: 4294967296}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: 134775813, c: 1, m: 4294967296}) }}},
-	},
-	TurboPascal: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: 134775813, c: 1, m: 4294967296}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: 134775813, c: 1, m: 4294967296}) }}},
-	},
-	Glibc: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: 1103515245, c: 12345, m: 2147483648}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: 1103515245, c: 12345, m: 2147483648}) }}},
-	},
-	ANSI_C: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: 1103515245, c: 12345, m: 2147483648}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: 1103515245, c: 12345, m: 2147483648}) }}},
-	},
-	MSVCpp: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: 214013, c: 2531011, m: 2147483648}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: 214013, c: 2531011, m: 2147483648}) }}},
-	},
-	MSVBasic: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: 1140671485, c: 12820163, m: 16777216}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: 1140671485, c: 12820163, m: 16777216}) }}},
-	},
-	RtlUniform: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: -18, c: -60, m: 2147483647}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: -18, c: -60, m: 2147483647}) }}},
-	},
-	MinstdRand: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: 48271, c: 0, m: 2147483647}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: 48271, c: 0, m: 2147483647}) }}},
-	},
-	MinstdRand0: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: 16807, c: 0, m: 2147483647}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: 16807, c: 0, m: 2147483647}) }}},
-	},
-	MMIX: wrapper{
-		Rand: rand.New(&lcg{seed: rand.Int63(), a: 6364136223846793005, c: 1442695040888963407, m: 18446744073709600000}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any {
-			return rand.New(&lcg{seed: rand.Int63(), a: 6364136223846793005, c: 1442695040888963407, m: 18446744073709600000})
-		}}},
-	},
-	Musl: wrapper{
-		Rand: rand.New(&lcg{seed: rand.Int63(), a: 6364136223846793005, c: 1, m: 18446744073709600000}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any {
-			return rand.New(&lcg{seed: rand.Int63(), a: 6364136223846793005, c: 1, m: 18446744073709600000})
-		}}},
-	},
-	Java: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: 25214903917, c: 11, m: 281474976710656}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: 25214903917, c: 11, m: 281474976710656}) }}},
-	},
-	POSIX: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: 25214903917, c: 11, m: 281474976710656}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: 25214903917, c: 11, m: 281474976710656}) }}},
-	},
-	Random0: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: 8121, c: 28411, m: 134456}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: 8121, c: 28411, m: 134456}) }}},
-	},
-	Cc65: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: 16843009, c: 826366247, m: 4294967296}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: 16843009, c: 826366247, m: 4294967296}) }}},
-	},
-	RANDU: wrapper{
-		Rand:       rand.New(&lcg{seed: rand.Int63(), a: 65539, c: 0, m: 2147483648}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: 65539, c: 0, m: 2147483648}) }}},
-	},
-}
+var (
+	lcgNew = func(a, c, m int64) wrapper {
+		return wrapper{
+			Rand:       rand.New(&lcg{seed: rand.Int63(), a: a, c: c, m: m}),
+			Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: a, c: c, m: m}) }}},
+		}
+	}
+	LCG = &lcgContainer{
+		ZXSpectrum:    lcgNew(75, 0, 65537),
+		Ranqd1:        lcgNew(1664525, 1013904223, 4294967296),
+		BorlandCpp:    lcgNew(22695477, 1, 2147483648),
+		BorlandDelphi: lcgNew(134775813, 1, 4294967296),
+		TurboPascal:   lcgNew(134775813, 1, 4294967296),
+		Glibc:         lcgNew(1103515245, 12345, 2147483648),
+		ANSI_C:        lcgNew(1103515245, 12345, 2147483648),
+		MSVCpp:        lcgNew(214013, 2531011, 2147483648),
+		MSVBasic:      lcgNew(1140671485, 12820163, 16777216),
+		RtlUniform:    lcgNew(-18, -60, 2147483647),
+		MinstdRand:    lcgNew(48271, 0, 2147483647),
+		MinstdRand0:   lcgNew(16807, 0, 2147483647),
+		MMIX:          lcgNew(6364136223846793005, 1442695040888963407, 18446744073709600000),
+		Musl:          lcgNew(6364136223846793005, 1, 18446744073709600000),
+		Java:          lcgNew(25214903917, 11, 281474976710656),
+		POSIX:         lcgNew(25214903917, 11, 281474976710656),
+		Random0:       lcgNew(8121, 28411, 134456),
+		Cc65:          lcgNew(16843009, 826366247, 4294967296),
+		RANDU:         lcgNew(65539, 0, 2147483648),
+	}
+)
