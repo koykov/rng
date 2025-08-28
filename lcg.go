@@ -1,6 +1,7 @@
 package rng
 
 import (
+	"math"
 	"math/rand"
 	"sync"
 )
@@ -64,8 +65,8 @@ var (
 		RtlUniform:    lcgNew(-18, -60, 2147483647),
 		MinstdRand:    lcgNew(48271, 0, 2147483647),
 		MinstdRand0:   lcgNew(16807, 0, 2147483647),
-		MMIX:          lcgNew(6364136223846793005, 1442695040888963407, 18446744073709600000),
-		Musl:          lcgNew(6364136223846793005, 1, 18446744073709600000),
+		MMIX:          lcgNew(6364136223846793005, 1442695040888963407, math.MaxInt64),
+		Musl:          lcgNew(6364136223846793005, 1, math.MaxInt64),
 		Java:          lcgNew(25214903917, 11, 281474976710656),
 		POSIX:         lcgNew(25214903917, 11, 281474976710656),
 		Random0:       lcgNew(8121, 28411, 134456),
