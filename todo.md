@@ -16,10 +16,10 @@
 
 ## 2. Pseudorandom Number Generators (PRNG)
 ├── **Linear methods**
-│   ├── Linear Congruential Generator (LCG)
-│   │   ├── ANSI C `rand()`
-│   │   ├── Java `java.util.Random` (legacy)
-│   │   └── Park-Miller MINSTD
+│   ├── Linear Congruential Generator (LCG) +
+│   │   ├── ANSI C `rand()` +
+│   │   ├── Java `java.util.Random` (legacy) +
+│   │   └── Park-Miller MINSTD +
 │   └── Linear Feedback Shift Register (LFSR)
 │       ├── Fibonacci LFSR
 │       └── Galois LFSR
