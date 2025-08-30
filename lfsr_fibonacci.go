@@ -2,11 +2,11 @@ package rng
 
 // Fibonacci LSFR implementation.
 type lsfrF struct {
-	data, poly, mask uint64
+	seed uint64
 }
 
 func (r *lsfrF) Seed(seed int64) {
-	r.data = uint64(seed)
+	r.seed = uint64(seed)
 }
 
 func (r *lsfrF) Int63() int64 {
@@ -14,7 +14,7 @@ func (r *lsfrF) Int63() int64 {
 }
 
 func (r *lsfrF) Uint64() uint64 {
-	lfsr := r.data
+	lfsr := r.seed
 	var period, fb uint64
 	initial := lfsr
 	for {
@@ -25,6 +25,6 @@ func (r *lsfrF) Uint64() uint64 {
 			break
 		}
 	}
-	r.data = period
-	return r.data
+	r.seed = period
+	return r.seed
 }
