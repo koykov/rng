@@ -201,6 +201,31 @@ func TestRNG(t *testing.T) {
 			testgroup(t, LCG.RANDU.Concurrent, true, 1, 10, 100, 1000)
 		})
 	})
+
+	t.Run("lsfr/Fibonacci", func(t *testing.T) {
+		t.Run("sync", func(t *testing.T) {
+			testgroup(t, LSFR.Fibonacci, false, 1, 10, 100, 1000)
+		})
+		t.Run("async", func(t *testing.T) {
+			testgroup(t, LSFR.Fibonacci.Concurrent, true, 1, 10, 100, 1000)
+		})
+	})
+	t.Run("lsfr/GaloisLeftShift", func(t *testing.T) {
+		t.Run("sync", func(t *testing.T) {
+			testgroup(t, LSFR.GaloisLeftShift, false, 1, 10, 100, 1000)
+		})
+		t.Run("async", func(t *testing.T) {
+			testgroup(t, LSFR.GaloisLeftShift.Concurrent, true, 1, 10, 100, 1000)
+		})
+	})
+	t.Run("lsfr/GaloisRightShift", func(t *testing.T) {
+		t.Run("sync", func(t *testing.T) {
+			testgroup(t, LSFR.GaloisRightShift, false, 1, 10, 100, 1000)
+		})
+		t.Run("async", func(t *testing.T) {
+			testgroup(t, LSFR.GaloisRightShift.Concurrent, true, 1, 10, 100, 1000)
+		})
+	})
 }
 
 func BenchmarkRNG(b *testing.B) {
