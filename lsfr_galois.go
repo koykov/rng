@@ -16,17 +16,17 @@ func (r *lsfrGL) Int63() int64 {
 func (r *lsfrGL) Uint64() uint64 {
 	const tapMask uint16 = 0x002D
 
-	lfsr := r.seed
+	lsfr := uint16(r.seed)
+	initial := uint16(r.seed)
 	var period uint64
-	initial := r.seed
 	for {
-		msb := (lfsr >> 15) & 1
-		lfsr <<= 1
-		if msb == 1 {
-			lfsr ^= uint64(tapMask)
+		msb := int16(lsfr) < 0
+		lsfr <<= 1
+		if msb {
+			lsfr ^= tapMask
 		}
 		period++
-		if lfsr == initial {
+		if lsfr == initial {
 			break
 		}
 	}
@@ -54,9 +54,9 @@ func (r *lsfrGR) Uint64() uint64 {
 	var period uint64
 	initial := r.seed
 	for {
-		lsb := lfsr & 1
+		lsb := lfsr&1 == 1
 		lfsr >>= 1
-		if lsb == 1 {
+		if lsb {
 			lfsr ^= uint64(tapMask)
 		}
 		period++
