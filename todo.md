@@ -20,9 +20,9 @@
 │   │   ├── ANSI C `rand()` +
 │   │   ├── Java `java.util.Random` (legacy) +
 │   │   └── Park-Miller MINSTD +
-│   └── Linear Feedback Shift Register (LFSR)
-│       ├── Fibonacci LFSR
-│       └── Galois LFSR
+│   └── Linear Feedback Shift Register (LFSR) +
+│       ├── Fibonacci LFSR +
+│       └── Galois LFSR +
 ├── **Modern non-cryptographic**
 │   ├── Mersenne Twister
 │   │   ├── MT19937 (Python/R default)
