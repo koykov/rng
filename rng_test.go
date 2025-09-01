@@ -253,6 +253,7 @@ func BenchmarkRNG(b *testing.B) {
 		b.Run("sync", func(b *testing.B) { benchfn(b, KernelUrandom, false) })
 		b.Run("async", func(b *testing.B) { benchfn(b, KernelUrandom.Concurrent, true) })
 	})
+
 	b.Run("lcg/ZXSpectrum", func(b *testing.B) {
 		b.Run("sync", func(b *testing.B) { benchfn(b, LCG.ZXSpectrum, false) })
 		b.Run("async", func(b *testing.B) { benchfn(b, LCG.ZXSpectrum.Concurrent, true) })
@@ -289,44 +290,17 @@ func BenchmarkRNG(b *testing.B) {
 		b.Run("sync", func(b *testing.B) { benchfn(b, LCG.MSVBasic, false) })
 		b.Run("async", func(b *testing.B) { benchfn(b, LCG.MSVBasic.Concurrent, true) })
 	})
-	b.Run("lcg/RtlUniform", func(b *testing.B) {
-		b.Run("sync", func(b *testing.B) { benchfn(b, LCG.RtlUniform, false) })
-		b.Run("async", func(b *testing.B) { benchfn(b, LCG.RtlUniform.Concurrent, true) })
+
+	b.Run("lfsr/Fibonacci", func(b *testing.B) {
+		b.Run("sync", func(b *testing.B) { benchfn(b, LSFR.Fibonacci, false) })
+		b.Run("async", func(b *testing.B) { benchfn(b, LSFR.Fibonacci.Concurrent, true) })
 	})
-	b.Run("lcg/minstd_rand", func(b *testing.B) {
-		b.Run("sync", func(b *testing.B) { benchfn(b, LCG.MinstdRand, false) })
-		b.Run("async", func(b *testing.B) { benchfn(b, LCG.MinstdRand.Concurrent, true) })
+	b.Run("lfsr/GaloisLeftShift", func(b *testing.B) {
+		b.Run("sync", func(b *testing.B) { benchfn(b, LSFR.GaloisLeftShift, false) })
+		b.Run("async", func(b *testing.B) { benchfn(b, LSFR.GaloisLeftShift.Concurrent, true) })
 	})
-	b.Run("lcg/minstd_rand0", func(b *testing.B) {
-		b.Run("sync", func(b *testing.B) { benchfn(b, LCG.MinstdRand0, false) })
-		b.Run("async", func(b *testing.B) { benchfn(b, LCG.MinstdRand0.Concurrent, true) })
-	})
-	b.Run("lcg/MMIX", func(b *testing.B) {
-		b.Run("sync", func(b *testing.B) { benchfn(b, LCG.MMIX, false) })
-		b.Run("async", func(b *testing.B) { benchfn(b, LCG.MMIX.Concurrent, true) })
-	})
-	b.Run("lcg/Musl", func(b *testing.B) {
-		b.Run("sync", func(b *testing.B) { benchfn(b, LCG.Musl, false) })
-		b.Run("async", func(b *testing.B) { benchfn(b, LCG.Musl.Concurrent, true) })
-	})
-	b.Run("lcg/Java", func(b *testing.B) {
-		b.Run("sync", func(b *testing.B) { benchfn(b, LCG.Java, false) })
-		b.Run("async", func(b *testing.B) { benchfn(b, LCG.Java.Concurrent, true) })
-	})
-	b.Run("lcg/POSIX", func(b *testing.B) {
-		b.Run("sync", func(b *testing.B) { benchfn(b, LCG.POSIX, false) })
-		b.Run("async", func(b *testing.B) { benchfn(b, LCG.POSIX.Concurrent, true) })
-	})
-	b.Run("lcg/random0", func(b *testing.B) {
-		b.Run("sync", func(b *testing.B) { benchfn(b, LCG.Random0, false) })
-		b.Run("async", func(b *testing.B) { benchfn(b, LCG.Random0.Concurrent, true) })
-	})
-	b.Run("lcg/cc65", func(b *testing.B) {
-		b.Run("sync", func(b *testing.B) { benchfn(b, LCG.Cc65, false) })
-		b.Run("async", func(b *testing.B) { benchfn(b, LCG.Cc65.Concurrent, true) })
-	})
-	b.Run("lcg/RANDU", func(b *testing.B) {
-		b.Run("sync", func(b *testing.B) { benchfn(b, LCG.RANDU, false) })
-		b.Run("async", func(b *testing.B) { benchfn(b, LCG.RANDU.Concurrent, true) })
+	b.Run("lfsr/GaloisRightShift", func(b *testing.B) {
+		b.Run("sync", func(b *testing.B) { benchfn(b, LSFR.GaloisRightShift, false) })
+		b.Run("async", func(b *testing.B) { benchfn(b, LSFR.GaloisRightShift.Concurrent, true) })
 	})
 }
