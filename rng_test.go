@@ -227,12 +227,14 @@ func TestRNG(t *testing.T) {
 		})
 	})
 
-	t.Run("lsfr/MersenneTwister/32", func(t *testing.T) {
-		t.Run("sync", func(t *testing.T) {
-			testgroup(t, MersenneTwister.mt19937, false, 1, 10, 100, 1000)
-		})
-		t.Run("async", func(t *testing.T) {
-			testgroup(t, MersenneTwister.mt19937.Concurrent, true, 1, 10, 100, 1000)
+	t.Run("Mersenne Twister/32", func(t *testing.T) {
+		t.Run("32", func(t *testing.T) {
+			t.Run("sync", func(t *testing.T) {
+				testgroup(t, MersenneTwister.mt19937, false, 1, 10, 100, 1000)
+			})
+			t.Run("async", func(t *testing.T) {
+				testgroup(t, MersenneTwister.mt19937.Concurrent, true, 1, 10, 100, 1000)
+			})
 		})
 	})
 }
@@ -311,5 +313,12 @@ func BenchmarkRNG(b *testing.B) {
 	b.Run("lfsr/GaloisRightShift", func(b *testing.B) {
 		b.Run("sync", func(b *testing.B) { benchfn(b, LSFR.GaloisRightShift, false) })
 		b.Run("async", func(b *testing.B) { benchfn(b, LSFR.GaloisRightShift.Concurrent, true) })
+	})
+
+	b.Run("Mersenne Twister/32", func(b *testing.B) {
+		b.Run("32", func(b *testing.B) {
+			b.Run("sync", func(b *testing.B) { benchfn(b, MersenneTwister.mt19937, false) })
+			b.Run("async", func(b *testing.B) { benchfn(b, MersenneTwister.mt19937.Concurrent, true) })
+		})
 	})
 }
