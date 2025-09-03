@@ -43,7 +43,7 @@ func (r *mt19937) Uint64() uint64 {
 	for j < 0 {
 		j += mt19937n
 	}
-	x := (r.state[k] & uint32(mt19937umask)) | (r.state[j] & mt19937lmask)
+	x := uint32(uint64(r.state[k])&mt19937umask) | (r.state[j] & mt19937lmask)
 	xA := x >> 1
 	if x&0x00000001 == 0 {
 		xA ^= mt19937a

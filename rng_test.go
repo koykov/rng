@@ -226,6 +226,15 @@ func TestRNG(t *testing.T) {
 			testgroup(t, LSFR.GaloisRightShift.Concurrent, true, 1, 10, 100, 1000)
 		})
 	})
+
+	t.Run("lsfr/MersenneTwister/32", func(t *testing.T) {
+		t.Run("sync", func(t *testing.T) {
+			testgroup(t, MersenneTwister.mt19937, false, 1, 10, 100, 1000)
+		})
+		t.Run("async", func(t *testing.T) {
+			testgroup(t, MersenneTwister.mt19937.Concurrent, true, 1, 10, 100, 1000)
+		})
+	})
 }
 
 func BenchmarkRNG(b *testing.B) {
