@@ -6,7 +6,7 @@ const (
 	mt19937f     = 1812433253
 	mt19937w     = 32
 	mt19937r     = 31
-	mt19937umask = uint32(0xffffffff) << mt19937r
+	mt19937umask = uint64(0xffffffff << mt19937r)
 	mt19937lmask = 0xffffffff >> (mt19937w - mt19937r)
 	mt19937a     = 0x9908b0df
 	mt19937u     = 11
@@ -43,7 +43,7 @@ func (r *mt19937) Uint64() uint64 {
 	for j < 0 {
 		j += mt19937n
 	}
-	x := (r.state[k] & mt19937umask) | (r.state[j] & mt19937lmask)
+	x := (r.state[k] & uint32(mt19937umask)) | (r.state[j] & mt19937lmask)
 	xA := x >> 1
 	if x&0x00000001 == 0 {
 		xA ^= mt19937a
