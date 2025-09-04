@@ -315,7 +315,7 @@ func BenchmarkRNG(b *testing.B) {
 		b.Run("async", func(b *testing.B) { benchfn(b, LSFR.GaloisRightShift.Concurrent, true) })
 	})
 
-	b.Run("Mersenne Twister/32", func(b *testing.B) {
+	b.Run("Mersenne Twister", func(b *testing.B) {
 		b.Run("32", func(b *testing.B) {
 			b.Run("sync", func(b *testing.B) { benchfn(b, MersenneTwister.mt19937, false) })
 			b.Run("async", func(b *testing.B) { benchfn(b, MersenneTwister.mt19937.Concurrent, true) })
