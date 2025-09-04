@@ -23,6 +23,12 @@ type mt19937 struct {
 	statei int
 }
 
+func newMt19937(seed int64) *mt19937 {
+	r := &mt19937{}
+	r.Seed(seed)
+	return r
+}
+
 func (r *mt19937) Seed(seed int64) {
 	r.seed = uint32(seed)
 	r.state[0] = uint32(seed)

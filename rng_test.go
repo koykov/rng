@@ -227,7 +227,7 @@ func TestRNG(t *testing.T) {
 		})
 	})
 
-	t.Run("Mersenne Twister/32", func(t *testing.T) {
+	t.Run("Mersenne Twister", func(t *testing.T) {
 		t.Run("32", func(t *testing.T) {
 			t.Run("sync", func(t *testing.T) {
 				testgroup(t, MersenneTwister.mt19937, false, 1, 10, 100, 1000)

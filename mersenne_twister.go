@@ -12,8 +12,8 @@ type mtContainer struct {
 
 var MersenneTwister = &mtContainer{
 	mt19937: wrapper{
-		Rand:       rand.New(&mt19937{seed: rand.Uint32()}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&mt19937{seed: rand.Uint32()}) }}},
+		Rand:       rand.New(newMt19937(rand.Int63())),
+		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(newMt19937(rand.Int63())) }}},
 	},
 	mt19937_64: wrapper{
 		Rand:       rand.New(&mt19937_64{seed: rand.Uint64()}),
