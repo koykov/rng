@@ -16,7 +16,7 @@ var MersenneTwister = &mtContainer{
 		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(newMt19937(rand.Int63())) }}},
 	},
 	mt19937_64: wrapper{
-		Rand:       rand.New(&mt19937_64{seed: rand.Uint64()}),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&mt19937_64{seed: rand.Uint64()}) }}},
+		Rand:       rand.New(newMt19937_64(rand.Int63())),
+		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(newMt19937_64(rand.Int63())) }}},
 	},
 }

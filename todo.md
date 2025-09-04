@@ -24,16 +24,17 @@
 │       ├── Fibonacci LFSR +
 │       └── Galois LFSR +
 ├── **Modern non-cryptographic**
-│   ├── Mersenne Twister
-│   │   ├── MT19937 (Python/R default)
-│   │   └── MT19937-64 (64-bit)
+│   ├── Mersenne Twister +
+│   │   ├── MT19937 (Python/R default) +
+│   │   └── MT19937-64 (64-bit) +
 │   ├── Xorshift
 │   │   ├── Xorshift32
 │   │   ├── Xorshift64
 │   │   └── Xorshift128+
 │   └── PCG (Permuted Congruential Generator)
-│       ├── PCG32
-│       └── PCG64
+│   |   ├── PCG32
+│   |   └── PCG64
+|   └── xoshiro256
 └── **Cryptographically secure**
 ├── Block cipher-based
 │   ├── AES-CTR (NIST SP800-90A)
