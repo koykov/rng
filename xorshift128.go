@@ -1,16 +1,16 @@
 package rng
 
-type xorshift128p struct {
+type xorshift128 struct {
 	x [4]uint32
 }
 
-func (r *xorshift128p) Seed(_ int64) {}
+func (r *xorshift128) Seed(_ int64) {}
 
-func (r *xorshift128p) Int63() int64 {
+func (r *xorshift128) Int63() int64 {
 	return int64(r.Uint64())
 }
 
-func (r *xorshift128p) Uint64() uint64 {
+func (r *xorshift128) Uint64() uint64 {
 	t := r.x[3]
 	s := r.x[0]
 	r.x[3] = r.x[2]
