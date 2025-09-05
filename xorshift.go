@@ -5,4 +5,5 @@ type xorshiftContainer struct {
 	Xorshift64      wrapper
 	Xorshift128     wrapper
 	Xorshift128Plus wrapper
+	Xorshift1024s   wrapper
 }
