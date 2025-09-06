@@ -4,9 +4,8 @@ type xorshift128 struct {
 	x [4]uint32
 }
 
-func newXorshift128(seed int64) *xorshift128 {
-	r := &xorshift128{}
-	r.Seed(seed)
+func newXorshift128(seed uint64) *xorshift128 {
+	r := &xorshift128{x: [4]uint32{uint32(seed)}}
 	return r
 }
 
