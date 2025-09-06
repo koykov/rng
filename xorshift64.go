@@ -4,7 +4,14 @@ type xorshift64 struct {
 	a uint64
 }
 
-func (r *xorshift64) Seed(_ int64) {}
+func newXorshift64(seed int64) *xorshift64 {
+	r := &xorshift64{a: uint64(seed)}
+	return r
+}
+
+func (r *xorshift64) Seed(seed int64) {
+	r.a = uint64(seed)
+}
 
 func (r *xorshift64) Int63() int64 {
 	return int64(r.Uint64())
