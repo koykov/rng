@@ -5,7 +5,15 @@ type xorshift1024s struct {
 	index int
 }
 
-func (r *xorshift1024s) Seed(_ int64) {}
+func newXorshift1024s(seed int64) *xorshift1024s {
+	r := &xorshift1024s{}
+	r.Seed(seed)
+	return r
+}
+
+func (r *xorshift1024s) Seed(seed int64) {
+	r.x[0] = uint64(seed)
+}
 
 func (r *xorshift1024s) Int63() int64 {
 	return int64(r.Uint64())
