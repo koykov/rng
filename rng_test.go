@@ -287,6 +287,14 @@ func TestRNG(t *testing.T) {
 				testgroup(t, Xorshift.Xorshift1024s.Concurrent, true, 1, 10, 100, 1000)
 			})
 		})
+		t.Run("r128p", func(t *testing.T) {
+			t.Run("sync", func(t *testing.T) {
+				testgroup(t, Xorshift.Xorshiftr128Plus, false, 1, 10, 100, 1000)
+			})
+			t.Run("async", func(t *testing.T) {
+				testgroup(t, Xorshift.Xorshiftr128Plus.Concurrent, true, 1, 10, 100, 1000)
+			})
+		})
 	})
 }
 
@@ -397,6 +405,10 @@ func BenchmarkRNG(b *testing.B) {
 		b.Run("1024s", func(b *testing.B) {
 			b.Run("sync", func(b *testing.B) { benchfn(b, Xorshift.Xorshift1024s, false) })
 			b.Run("async", func(b *testing.B) { benchfn(b, Xorshift.Xorshift1024s.Concurrent, true) })
+		})
+		b.Run("r128p", func(b *testing.B) {
+			b.Run("sync", func(b *testing.B) { benchfn(b, Xorshift.Xorshiftr128Plus, false) })
+			b.Run("async", func(b *testing.B) { benchfn(b, Xorshift.Xorshiftr128Plus.Concurrent, true) })
 		})
 	})
 }

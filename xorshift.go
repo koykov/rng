@@ -6,11 +6,12 @@ import (
 )
 
 type xorshiftContainer struct {
-	Xorshift32      wrapper
-	Xorshift64      wrapper
-	Xorshift128     wrapper
-	Xorshift128Plus wrapper
-	Xorshift1024s   wrapper
+	Xorshift32       wrapper
+	Xorshift64       wrapper
+	Xorshift128      wrapper
+	Xorshift128Plus  wrapper
+	Xorshift1024s    wrapper
+	Xorshiftr128Plus wrapper
 }
 
 var Xorshift = xorshiftContainer{
@@ -33,5 +34,9 @@ var Xorshift = xorshiftContainer{
 	Xorshift1024s: wrapper{
 		Rand:       rand.New(newXorshift1024s(rand.Int63())),
 		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(newXorshift1024s(rand.Int63())) }}},
+	},
+	Xorshiftr128Plus: wrapper{
+		Rand:       rand.New(newXorshiftr128p(rand.Uint64())),
+		Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(newXorshiftr128p(rand.Uint64())) }}},
 	},
 }
