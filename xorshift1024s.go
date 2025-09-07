@@ -23,8 +23,8 @@ func (r *xorshift1024s) Uint64() uint64 {
 	index := r.index
 	s := r.x[index]
 	index++
-	t := r.x[index]
 	index &= 15
+	t := r.x[index]
 	t ^= t << 31
 	t ^= t >> 11
 	t ^= s ^ (s >> 30)
