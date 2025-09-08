@@ -4,8 +4,8 @@ type xoshiro256p struct {
 	xoshiroBase
 }
 
-func newXoshiro256p(seed uint64) *xoshiro256p {
-	r := &xoshiro256p{xoshiroBase{s: [4]uint64{seed}}}
+func newXoshiro256p(state [4]uint64) *xoshiro256p {
+	r := &xoshiro256p{xoshiroBase{s: state}}
 	return r
 }
 
