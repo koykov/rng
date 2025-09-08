@@ -34,7 +34,7 @@
 │   └── PCG (Permuted Congruential Generator)
 │   |   ├── PCG32
 │   |   └── PCG64
-|   └── xoshiro*
+|   └── xoshiro* +
 └── **Cryptographically secure**
 ├── Block cipher-based
 │   ├── AES-CTR (NIST SP800-90A)

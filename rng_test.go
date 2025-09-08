@@ -296,6 +296,33 @@ func TestRNG(t *testing.T) {
 			})
 		})
 	})
+
+	t.Run("Xoshiro", func(t *testing.T) {
+		t.Run("256p", func(t *testing.T) {
+			t.Run("sync", func(t *testing.T) {
+				testgroup(t, Xoshiro.Xoshiro256Plus, false, 1, 10, 100, 1000)
+			})
+			t.Run("async", func(t *testing.T) {
+				testgroup(t, Xoshiro.Xoshiro256Plus.Concurrent, true, 1, 10, 100, 1000)
+			})
+		})
+		t.Run("256pp", func(t *testing.T) {
+			t.Run("sync", func(t *testing.T) {
+				testgroup(t, Xoshiro.Xoshiro256PlusPlus, false, 1, 10, 100, 1000)
+			})
+			t.Run("async", func(t *testing.T) {
+				testgroup(t, Xoshiro.Xoshiro256PlusPlus.Concurrent, true, 1, 10, 100, 1000)
+			})
+		})
+		t.Run("256ss", func(t *testing.T) {
+			t.Run("sync", func(t *testing.T) {
+				testgroup(t, Xoshiro.Xoshiro256SS, false, 1, 10, 100, 1000)
+			})
+			t.Run("async", func(t *testing.T) {
+				testgroup(t, Xoshiro.Xoshiro256SS.Concurrent, true, 1, 10, 100, 1000)
+			})
+		})
+	})
 }
 
 func BenchmarkRNG(b *testing.B) {
@@ -409,6 +436,21 @@ func BenchmarkRNG(b *testing.B) {
 		b.Run("r128p", func(b *testing.B) {
 			b.Run("sync", func(b *testing.B) { benchfn(b, Xorshift.Xorshiftr128Plus, false) })
 			b.Run("async", func(b *testing.B) { benchfn(b, Xorshift.Xorshiftr128Plus.Concurrent, true) })
+		})
+	})
+
+	b.Run("Xoshiro", func(b *testing.B) {
+		b.Run("256p", func(b *testing.B) {
+			b.Run("sync", func(b *testing.B) { benchfn(b, Xoshiro.Xoshiro256Plus, false) })
+			b.Run("async", func(b *testing.B) { benchfn(b, Xoshiro.Xoshiro256Plus.Concurrent, true) })
+		})
+		b.Run("256pp", func(b *testing.B) {
+			b.Run("sync", func(b *testing.B) { benchfn(b, Xoshiro.Xoshiro256PlusPlus, false) })
+			b.Run("async", func(b *testing.B) { benchfn(b, Xoshiro.Xoshiro256PlusPlus.Concurrent, true) })
+		})
+		b.Run("256ss", func(b *testing.B) {
+			b.Run("sync", func(b *testing.B) { benchfn(b, Xoshiro.Xoshiro256SS, false) })
+			b.Run("async", func(b *testing.B) { benchfn(b, Xoshiro.Xoshiro256SS.Concurrent, true) })
 		})
 	})
 }
