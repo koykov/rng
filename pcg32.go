@@ -6,7 +6,7 @@ const (
 )
 
 type pcg32 struct {
-	pcgBase
+	state uint64
 }
 
 func newPCG32(seed uint64) *pcg32 {
@@ -31,4 +31,8 @@ func (r *pcg32) Uint64() uint64 {
 	r.state = x*pcg32multiplier + pcg32increment
 	x ^= x >> 18
 	return uint64(r.rotr32(uint32(x>>27), count))
+}
+
+func (b *pcg32) rotr32(x uint32, r uint64) uint32 {
+	return x>>r | x<<(-r&31)
 }
