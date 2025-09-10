@@ -24,8 +24,8 @@ func newPCG64(a, b uint64) *pcg64 {
 }
 
 func (r *pcg64) Seed(seed int64) {
-	r.a = uint64(seed) + pcg64increment
-	r.b = uint64(seed) * pcg64multiplier
+	r.a = uint64(seed)
+	r.b = uint64(seed)
 	r.Uint64()
 }
 
@@ -34,7 +34,33 @@ func (r *pcg64) Int63() int64 {
 }
 
 func (r *pcg64) Uint64() uint64 {
-	// r.mul() todo implement me
-	// r.add() todo implement me
+	mul := func(a, b uint64) (a1, b1 uint64) {
+		x0 := a & math.MaxUint32
+		x1 := a >> 32
+		y0 := b & math.MaxUint32
+		y1 := b >> 32
+		w0 := x0 * y0
+		t := x1*y0 + w0>>32
+		w1 := t & math.MaxUint32
+		w2 := t >> 32
+		w1 += x0 * y1
+		a1 = x1*y1 + w2 + w1>>32
+		b1 = a * b
+		return
+	}
+	b, a := mul(r.a, pcg64multiplierA)
+	b += r.b * pcg64multiplierA
+	b += r.a * pcg64multiplierB
+	r.a, r.b = a, b
+
+	var c uint64
+	r.a, c = r.add(r.a, pcg64incrementA, c)
+	r.b, c = r.add(r.b, pcg64incrementB, c)
+
 	return bits.RotateLeft64(r.b^r.a, -int(r.b>>58))
+}
+
+func (r *pcg64) add(a, b, c uint64) (uint64, uint64) {
+	x := a + b + c
+	return x, ((a & b) | (a|b)&^x) >> 63
 }
