@@ -323,6 +323,25 @@ func TestRNG(t *testing.T) {
 			})
 		})
 	})
+
+	t.Run("PCG", func(t *testing.T) {
+		t.Run("32", func(t *testing.T) {
+			t.Run("sync", func(t *testing.T) {
+				testgroup(t, PCG.PCG32, false, 1, 10, 100, 1000)
+			})
+			t.Run("async", func(t *testing.T) {
+				testgroup(t, PCG.PCG32.Concurrent, true, 1, 10, 100, 1000)
+			})
+		})
+		t.Run("64", func(t *testing.T) {
+			t.Run("sync", func(t *testing.T) {
+				testgroup(t, PCG.PCG64, false, 1, 10, 100, 1000)
+			})
+			t.Run("async", func(t *testing.T) {
+				testgroup(t, PCG.PCG64.Concurrent, true, 1, 10, 100, 1000)
+			})
+		})
+	})
 }
 
 func BenchmarkRNG(b *testing.B) {
@@ -451,6 +470,17 @@ func BenchmarkRNG(b *testing.B) {
 		b.Run("256ss", func(b *testing.B) {
 			b.Run("sync", func(b *testing.B) { benchfn(b, Xoshiro.Xoshiro256SS, false) })
 			b.Run("async", func(b *testing.B) { benchfn(b, Xoshiro.Xoshiro256SS.Concurrent, true) })
+		})
+	})
+
+	b.Run("PCG", func(b *testing.B) {
+		b.Run("32", func(b *testing.B) {
+			b.Run("sync", func(b *testing.B) { benchfn(b, PCG.PCG32, false) })
+			b.Run("async", func(b *testing.B) { benchfn(b, PCG.PCG32.Concurrent, true) })
+		})
+		b.Run("64", func(b *testing.B) {
+			b.Run("sync", func(b *testing.B) { benchfn(b, PCG.PCG64, false) })
+			b.Run("async", func(b *testing.B) { benchfn(b, PCG.PCG64.Concurrent, true) })
 		})
 	})
 }
