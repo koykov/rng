@@ -31,9 +31,9 @@
 │   │   ├── Xorshift32 +
 │   │   ├── Xorshift64 +
 │   │   └── Xorshift128+ +
-│   └── PCG (Permuted Congruential Generator)
-│   |   ├── PCG32
-│   |   └── PCG64
+│   └── PCG (Permuted Congruential Generator) +
+│   |   ├── PCG32 +
+│   |   └── PCG64 +
 |   └── xoshiro* +
 └── **Cryptographically secure**
 ├── Block cipher-based
