@@ -24,15 +24,19 @@ type kernelRandom struct {
 	once      sync.Once
 }
 
+func NewKernelRandomSource() rand.Source64 {
+	return &kernelRandom{fp: fpDevRandom}
+}
+
 var KernelRandom = &wrapper{
-	Rand:       rand.New(&kernelRandom{fp: fpDevRandom}),
-	Concurrent: &Pool{New: func() rand.Source64 { return &kernelRandom{fp: fpDevRandom} }},
+	Rand:       rand.New(NewKernelRandomSource()),
+	Concurrent: &Pool{New: func() rand.Source64 { return NewKernelRandomSource() }},
 }
 
 func NewKernelRandom() Interface {
 	return &wrapper{
-		Rand:       rand.New(&kernelRandom{fp: fpDevRandom}),
-		Concurrent: &Pool{New: func() rand.Source64 { return &kernelRandom{fp: fpDevRandom} }},
+		Rand:       rand.New(NewKernelRandomSource()),
+		Concurrent: &Pool{New: func() rand.Source64 { return NewKernelRandomSource() }},
 	}
 }
 

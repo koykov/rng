@@ -9,6 +9,10 @@ type lcg struct {
 	seed, a, c, m int64
 }
 
+func NewLCGSource(a, c, m int64) rand.Source64 {
+	return &lcg{seed: rand.Int63(), a: a, c: c, m: m}
+}
+
 func (r *lcg) Seed(v int64) {
 	r.seed = v
 }
@@ -47,8 +51,8 @@ type lcgContainer struct {
 var (
 	lcgNew = func(a, c, m int64) wrapper {
 		return wrapper{
-			Rand:       rand.New(&lcg{seed: rand.Int63(), a: a, c: c, m: m}),
-			Concurrent: &Pool{New: func() rand.Source64 { return &lcg{seed: rand.Int63(), a: a, c: c, m: m} }},
+			Rand:       rand.New(NewLCGSource(a, c, m)),
+			Concurrent: &Pool{New: func() rand.Source64 { return NewLCGSource(a, c, m) }},
 		}
 	}
 	LCG = &lcgContainer{

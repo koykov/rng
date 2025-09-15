@@ -17,7 +17,7 @@ type mt19937_64 struct {
 	mag01  [2]uint64
 }
 
-func newMt19937_64(seed int64) *mt19937_64 {
+func NewMt19937_64Source(seed int64) rand.Source64 {
 	r := &mt19937_64{
 		statei: mt19937_64n + 1,
 		mag01:  [2]uint64{0, mt19937_64matrixA},

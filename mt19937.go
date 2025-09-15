@@ -1,5 +1,7 @@
 package rng
 
+import "math/rand"
+
 const (
 	mt19937n     = 624
 	mt19937m     = 397
@@ -23,7 +25,7 @@ type mt19937 struct {
 	statei int
 }
 
-func newMt19937(seed int64) *mt19937 {
+func NewMt19937Source(seed int64) rand.Source64 {
 	r := &mt19937{}
 	r.Seed(seed)
 	return r

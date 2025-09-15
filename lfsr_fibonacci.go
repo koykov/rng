@@ -1,8 +1,14 @@
 package rng
 
+import "math/rand"
+
 // Fibonacci LSFR implementation.
 type lsfrF struct {
 	seed uint64
+}
+
+func NewLSFRFibonacciSource(seed uint64) rand.Source64 {
+	return &lsfrF{seed: seed}
 }
 
 func (r *lsfrF) Seed(seed int64) {

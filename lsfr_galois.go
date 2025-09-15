@@ -1,8 +1,14 @@
 package rng
 
+import "math/rand"
+
 // Galois LSFR (left shift) implementation.
 type lsfrGL struct {
 	seed uint64
+}
+
+func NewLSFRGaloisLeftShift(seed uint64) rand.Source64 {
+	return &lsfrGL{seed: seed}
 }
 
 func (r *lsfrGL) Seed(seed int64) {
@@ -37,6 +43,10 @@ func (r *lsfrGL) Uint64() uint64 {
 // Galois LSFR (right shift) implementation.
 type lsfrGR struct {
 	seed uint64
+}
+
+func NewLSFRGaloisRightShift(seed uint64) rand.Source64 {
+	return &lsfrGR{seed: seed}
 }
 
 func (r *lsfrGR) Seed(seed int64) {
