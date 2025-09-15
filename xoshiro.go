@@ -2,7 +2,6 @@ package rng
 
 import (
 	"math/rand"
-	"sync"
 )
 
 type xoshiroContainer struct {
@@ -14,21 +13,21 @@ type xoshiroContainer struct {
 var Xoshiro = xoshiroContainer{
 	Xoshiro256Plus: wrapper{
 		Rand: rand.New(newXoshiro256p([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()})),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any {
+		Concurrent: &Pool{New: func() rand.Source64 {
 			return rand.New(newXoshiro256p([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()}))
-		}}},
+		}},
 	},
 	Xoshiro256PlusPlus: wrapper{
 		Rand: rand.New(newXoshiro256pp([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()})),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any {
+		Concurrent: &Pool{New: func() rand.Source64 {
 			return rand.New(newXoshiro256pp([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()}))
-		}}},
+		}},
 	},
 	Xoshiro256SS: wrapper{
 		Rand: rand.New(newXoshiro256ss([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()})),
-		Concurrent: &concurrent{Pool: sync.Pool{New: func() any {
+		Concurrent: &Pool{New: func() rand.Source64 {
 			return rand.New(newXoshiro256ss([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()}))
-		}}},
+		}},
 	},
 }
 

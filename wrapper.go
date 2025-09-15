@@ -4,5 +4,5 @@ import "math/rand"
 
 type wrapper struct {
 	*rand.Rand
-	Concurrent *concurrent
+	Concurrent *Pool
 }

@@ -3,7 +3,6 @@ package rng
 import (
 	"math"
 	"math/rand"
-	"sync"
 )
 
 type lcg struct {
@@ -49,7 +48,7 @@ var (
 	lcgNew = func(a, c, m int64) wrapper {
 		return wrapper{
 			Rand:       rand.New(&lcg{seed: rand.Int63(), a: a, c: c, m: m}),
-			Concurrent: &concurrent{Pool: sync.Pool{New: func() any { return rand.New(&lcg{seed: rand.Int63(), a: a, c: c, m: m}) }}},
+			Concurrent: &Pool{New: func() rand.Source64 { return &lcg{seed: rand.Int63(), a: a, c: c, m: m} }},
 		}
 	}
 	LCG = &lcgContainer{
