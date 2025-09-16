@@ -1,3 +1,5 @@
 # RNG
 
-Collection of various random number generators.
+Collection of various sources for RNG (random number generator) and tests.
+
+...
