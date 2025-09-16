@@ -1,10 +1,12 @@
 package rng
 
+import "math/rand"
+
 type xorshift128 struct {
 	x [4]uint32
 }
 
-func newXorshift128(seed uint64) *xorshift128 {
+func NewXorshift128Source(seed uint64) rand.Source64 {
 	r := &xorshift128{x: [4]uint32{uint32(seed)}}
 	return r
 }

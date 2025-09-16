@@ -3,6 +3,7 @@ package rng
 import (
 	"math"
 	"math/bits"
+	"math/rand"
 )
 
 const (
@@ -19,7 +20,7 @@ type pcg64 struct {
 	a, b uint64
 }
 
-func newPCG64(a, b uint64) *pcg64 {
+func NewPCG64Source(a, b uint64) rand.Source64 {
 	return &pcg64{a, b}
 }
 

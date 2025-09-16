@@ -15,27 +15,27 @@ type xorshiftContainer struct {
 
 var Xorshift = xorshiftContainer{
 	Xorshift32: wrapper{
-		Rand:       rand.New(newXorshift32(rand.Int63())),
-		Concurrent: &Pool{New: func() rand.Source64 { return rand.New(newXorshift32(rand.Int63())) }},
+		Rand:       rand.New(NewXorshift32Source(rand.Int63())),
+		Concurrent: &Pool{New: func() rand.Source64 { return rand.New(NewXorshift32Source(rand.Int63())) }},
 	},
 	Xorshift64: wrapper{
-		Rand:       rand.New(newXorshift64(rand.Int63())),
-		Concurrent: &Pool{New: func() rand.Source64 { return rand.New(newXorshift64(rand.Int63())) }},
+		Rand:       rand.New(NewXorshift64Source(rand.Int63())),
+		Concurrent: &Pool{New: func() rand.Source64 { return rand.New(NewXorshift64Source(rand.Int63())) }},
 	},
 	Xorshift128: wrapper{
-		Rand:       rand.New(newXorshift128(rand.Uint64())),
-		Concurrent: &Pool{New: func() rand.Source64 { return rand.New(newXorshift128(rand.Uint64())) }},
+		Rand:       rand.New(NewXorshift128Source(rand.Uint64())),
+		Concurrent: &Pool{New: func() rand.Source64 { return rand.New(NewXorshift128Source(rand.Uint64())) }},
 	},
 	Xorshift128Plus: wrapper{
-		Rand:       rand.New(newXorshift128p(rand.Uint64())),
-		Concurrent: &Pool{New: func() rand.Source64 { return rand.New(newXorshift128p(rand.Uint64())) }},
+		Rand:       rand.New(NewXorshift128pSource(rand.Uint64())),
+		Concurrent: &Pool{New: func() rand.Source64 { return rand.New(NewXorshift128pSource(rand.Uint64())) }},
 	},
 	Xorshift1024s: wrapper{
-		Rand:       rand.New(newXorshift1024s(rand.Int63())),
-		Concurrent: &Pool{New: func() rand.Source64 { return rand.New(newXorshift1024s(rand.Int63())) }},
+		Rand:       rand.New(NewXorshift1024sSource(rand.Int63())),
+		Concurrent: &Pool{New: func() rand.Source64 { return rand.New(NewXorshift1024sSource(rand.Int63())) }},
 	},
 	Xorshiftr128Plus: wrapper{
-		Rand:       rand.New(newXorshiftr128p(rand.Uint64())),
-		Concurrent: &Pool{New: func() rand.Source64 { return rand.New(newXorshiftr128p(rand.Uint64())) }},
+		Rand:       rand.New(NewXorshiftr128pSource(rand.Uint64())),
+		Concurrent: &Pool{New: func() rand.Source64 { return rand.New(NewXorshiftr128pSource(rand.Uint64())) }},
 	},
 }

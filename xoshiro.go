@@ -12,21 +12,21 @@ type xoshiroContainer struct {
 
 var Xoshiro = xoshiroContainer{
 	Xoshiro256Plus: wrapper{
-		Rand: rand.New(newXoshiro256p([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()})),
+		Rand: rand.New(NewXoshiro256pSource([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()})),
 		Concurrent: &Pool{New: func() rand.Source64 {
-			return rand.New(newXoshiro256p([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()}))
+			return rand.New(NewXoshiro256pSource([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()}))
 		}},
 	},
 	Xoshiro256PlusPlus: wrapper{
-		Rand: rand.New(newXoshiro256pp([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()})),
+		Rand: rand.New(NewXoshiro256ppSource([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()})),
 		Concurrent: &Pool{New: func() rand.Source64 {
-			return rand.New(newXoshiro256pp([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()}))
+			return rand.New(NewXoshiro256ppSource([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()}))
 		}},
 	},
 	Xoshiro256SS: wrapper{
-		Rand: rand.New(newXoshiro256ss([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()})),
+		Rand: rand.New(NewXoshiro256ssSource([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()})),
 		Concurrent: &Pool{New: func() rand.Source64 {
-			return rand.New(newXoshiro256ss([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()}))
+			return rand.New(NewXoshiro256ssSource([4]uint64{rand.Uint64(), rand.Uint64(), rand.Uint64(), rand.Uint64()}))
 		}},
 	},
 }

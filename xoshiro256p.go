@@ -1,10 +1,12 @@
 package rng
 
+import "math/rand"
+
 type xoshiro256p struct {
 	xoshiroBase
 }
 
-func newXoshiro256p(state [4]uint64) *xoshiro256p {
+func NewXoshiro256pSource(state [4]uint64) rand.Source64 {
 	r := &xoshiro256p{xoshiroBase{s: state}}
 	return r
 }

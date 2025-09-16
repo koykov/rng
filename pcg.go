@@ -11,13 +11,13 @@ type pcgContainer struct {
 
 var PCG = pcgContainer{
 	PCG32: wrapper{
-		Rand: rand.New(newPCG32(rand.Uint64())),
+		Rand: rand.New(NewPCG32Source(rand.Uint64())),
 		Concurrent: &Pool{New: func() rand.Source64 {
-			return rand.New(newPCG32(rand.Uint64()))
+			return rand.New(NewPCG32Source(rand.Uint64()))
 		}},
 	},
 	PCG64: wrapper{
-		Rand:       rand.New(newPCG64(rand.Uint64(), rand.Uint64())),
-		Concurrent: &Pool{New: func() rand.Source64 { return newPCG64(rand.Uint64(), rand.Uint64()) }},
+		Rand:       rand.New(NewPCG64Source(rand.Uint64(), rand.Uint64())),
+		Concurrent: &Pool{New: func() rand.Source64 { return NewPCG64Source(rand.Uint64(), rand.Uint64()) }},
 	},
 }

@@ -1,5 +1,7 @@
 package rng
 
+import "math/rand"
+
 const (
 	pcg32increment  = 1442695040888963407
 	pcg32multiplier = 6364136223846793005
@@ -9,7 +11,7 @@ type pcg32 struct {
 	state uint64
 }
 
-func newPCG32(seed uint64) *pcg32 {
+func NewPCG32Source(seed uint64) rand.Source64 {
 	var r pcg32
 	r.Seed(int64(seed))
 	return &r
