@@ -69,11 +69,9 @@
 └── Quantum algorithm emulators (software-only)
 
 ## Tests
-├── Runs Test +
 ├── Monobit Test +
 ├── Berlekamp-Massey Algorithm +
 ├── Entropy Test +
-├── Birthday Spacing Test +
 ├── Avalanche Test +
 ├── Batteries
 │   ├── Diehard Tests (Marsaglia)

@@ -61,3 +61,25 @@ go func() { _ = rng.KernelRandom.Concurrent.Float64() }
 go func() { _ = rng.KernelRandom.Concurrent.Int31n(1000) }
 ...
 ```
+
+### Tests
+
+List of implemented statistical tests:
+* [Diehard](https://en.wikipedia.org/wiki/Diehard_tests)
+  * [Birthday Spacing Test](https://www.pcg-random.org/posts/birthday-test.html)
+  * [Overlapping Permutations Test](overlapping_permutations_test.go)
+  * [Count-the-1’s Test](count_the_1st_test.go)
+  * [Minimum Distance Test](minimum_distance_test.go)
+  * [Random Spheres Test](random_spheres_test.go)
+  * [The Squeeze Test](squeeze_test.go)
+  * [Runs Test](runs_test.go)
+  * [The Craps Test](crasp_test.go)
+  * [Marsaglia and Tsang’s GCD Test](marsaglia_tsang_gcd_test.go)
+* [Monobit Test](monobit_test.go)
+* [Berlekamp-Massey Algorithm](berlekamp_massey_test.go)
+* [Entropy Test](entropy_test.go)
+* [Avalanche Test](avalanche_test.go)
+* [ChiSquare Test](chi_square_test.go)
+* [Kolmogorov-Smirnov Test](kolmogorov_smirnov_test.go)
+* [Autocorrelation Test](autocorrelation_test.go)
+* [Uniformity Test](uniformity_test.go)
